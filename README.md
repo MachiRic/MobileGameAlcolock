@@ -9,4 +9,4 @@ Then run:
 
 Then open your preferred browser and type: `http://127.0.0.1:8082/index.html`
 
-//You also need Phaser to run the project. [Here](http://phaser.io/download/stable) is a guide to download Phaser.
+<!--You also need Phaser to run the project. [Here](http://phaser.io/download/stable) is a guide to download Phaser.-->
