@@ -1,6 +1,7 @@
 Ball.Preloader = function(game) {};
 Ball.Preloader.prototype = {
 	preload: function() {
+		//Preloads all the objects before they are shown. Important to load all images here! Otherwise we will have errors!!
 		this.preloadBg = this.add.sprite((Ball._WIDTH-297)*0.5, (Ball._HEIGHT-145)*0.5, 'preloaderBg');
 		this.preloadBar = this.add.sprite((Ball._WIDTH-158)*0.5, (Ball._HEIGHT-50)*0.5, 'preloaderBar');
 		this.load.setPreloadSprite(this.preloadBar);
