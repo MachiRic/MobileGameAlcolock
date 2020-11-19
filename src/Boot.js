@@ -6,8 +6,8 @@ Ball.Boot = function(game) {};
 Ball.Boot.prototype = {
     preload: function() {
         //Change and add the correct loading bar. Create png.
-        //this.load.image('preloaderBg', 'img/loading-bg.png');
-        //this.load.image('preloaderBar', 'img/loading-bar.png');
+        this.load.image('preloaderBg', 'img/loading-bg.png');
+        this.load.image('preloaderBar', 'img/loading-bar.png');
         
     },
     create: function() {
