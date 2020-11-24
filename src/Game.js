@@ -5,9 +5,7 @@ Ball.Game.prototype = {
 		this.add.sprite(0, 0, 'screen-bg');
 		this.add.sprite(0, 0, 'panel');
 		this.physics.startSystem(Phaser.Physics.ARCADE);	//Physics
-		this.fontSmall = { font: "16px Arial", fill: "#e4beef" };
-		this.fontBig = { font: "24px Arial", fill: "#e4beef" };
-		this.fontMessage = { font: "24px Arial", fill: "#e4beef", align: "center", stroke: "#320C3E", strokeThickness: 4 };
+		//this.fontMessage = { font: "24px Arial", fill: "#e4beef", align: "center", stroke: "#320C3E", strokeThickness: 4 };
 		this.audioStatus = true;
 		this.timer = 0;
 		this.totalTimer = 0;
@@ -30,10 +28,10 @@ Ball.Game.prototype = {
 		this.audioButton.animations.add('false', [1], 10, true);
 		this.audioButton.animations.play(this.audioStatus);
 		*/
-		this.timerText = this.game.add.text(15, 15, "Time: " + this.timer, this.fontBig);
-		this.levelText = this.game.add.text(120, 10, "Level: " + this.level + " / " + this.maxLevels, this.fontSmall);
+		this.timerText = this.game.add.text(15, 15, "Time: " + this.timer, {...Ball.fontBig, ...Ball.white});
+		//this.levelText = this.game.add.text(120, 10, "Level: " + this.level + " / " + this.maxLevels, {...Ball.fontSmall, ...Ball.white});
 		//this.totalTimeText = this.game.add.text(120, 30, "Total time: "+this.totalTimer, this.fontSmall );
-		this.totalCollisionsText = this.game.add.text(120, 30, "Total collisions: " + this.totalCollisions, this.fontSmall);
+		this.totalCollisionsText = this.game.add.text(120, 15, "Total collisions: " + this.totalCollisions, {...Ball.fontBig, ...Ball.white});
 
 		//Create the goal of the game, the hole
 		this.hole = this.add.sprite(Ball._WIDTH * 0.5, 90, 'hole');
@@ -197,6 +195,7 @@ Ball.Game.prototype = {
 			this.bounceSound.play();
 		}
 		// Vibration API. Should we keep this??
+		
 		if ("vibrate" in window.navigator) {
 			window.navigator.vibrate(100);
 		}
@@ -229,8 +228,9 @@ Ball.Game.prototype = {
 		//This decide what happens when we finish the level. We should probably show a new screen instead of a popup window
 		if (this.level >= this.maxLevels) {
 			this.totalTimer += this.timer;
-			alert('Congratulations, game completed!\nTotal time of play: ' + this.totalTimer + ' seconds!');
-			this.game.state.start('MainMenu');
+			//alert('Congratulations, game completed!\nTotal time of play: ' + this.totalTimer + ' seconds!');
+			//this.game.state.start('MainMenu');
+			this.game.state.start('Result');
 		}
 		else {
 			//Change this to a new screen instead of popup!
