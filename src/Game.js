@@ -18,6 +18,9 @@ Ball.Game.prototype = {
 		this.ballStartPos = { x: Ball._WIDTH * 0.5, y: 450 };
 		this.down = false;
 
+
+
+
 		//Create buttons
 		/*
 		this.pauseButton = this.add.button(Ball._WIDTH-8, 8, 'button-pause', this.managePause, this);
@@ -48,32 +51,27 @@ Ball.Game.prototype = {
 		this.ball.body.setSize(18, 18);
 		this.ball.body.bounce.set(0.3, 0.3);
 
+		this.prevPos = this.ballStartPos.x, this.ballStartPos.y;
+
+		//Input from keyboard
+		this.keys = this.game.input.keyboard.createCursorKeys();
+
+
+
+		//  Input Enable the sprites
+		this.ball.inputEnabled = true;
+
+		//  Allow dragging - the 'true' parameter will make the sprite snap to the center
+		this.ball.input.enableDrag(true);
+		//console.log(this.ball.events);
 
 		//Initialise levels
 		this.initLevels();
 		this.showLevel(1);
 
-		//User input
-		this.keys = this.game.input.keyboard.createCursorKeys();
-		this.playerInput = this.game.input.addMoveCallback(this.clicked, this.ball);
-		//this.playerInput = setInteractiveCandidateHandler(this.clicked, this);
-		//mouse+touch
-		//this.game.input.onHold.add(this.clicked, this);
-		
-		/*if (this.game.input.isDown){
-			console.log("is down");
-		}*/
-		/*
-		var mySignal = new Phaser.Signal();
-		
-		mySignal.dispatch(this.game.input.pointer.isDown);
-		mySignal.add(this.clicked, this);
-		*/
-
-		//this.game.input.onDown.add(function() { console.log("clicked") });
 		//Create player and input from device as orientation
 		Ball._player = this.ball;
-		window.addEventListener("deviceorientation", this.handleOrientation, true);
+		//window.addEventListener("deviceorientation", this.handleOrientation, true);
 
 		//Update game every second (only timer or everything?)
 		this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
@@ -87,6 +85,10 @@ Ball.Game.prototype = {
 		this.borderGroup.create(Ball._WIDTH - 2, 0, 'border-vertical');
 		this.borderGroup.setAll('body.immovable', true);
 		this.bounceSound = this.game.add.audio('audio-bounce');
+
+		//this.ball.body.collideWorldBounds = true;
+		//this.ball.body.bounce.set(0.9);
+
 	},
 	initLevels: function () {
 		//This is where we create the levels!!!
@@ -174,7 +176,7 @@ Ball.Game.prototype = {
 	},*/
 	update: function () {
 		//Input from user, should change to touch
-		if (this.keys.left.isDown) {
+		/*if (this.keys.left.isDown) {
 			this.ball.body.velocity.x -= this.movementForce;
 		}
 		else if (this.keys.right.isDown) {
@@ -185,25 +187,71 @@ Ball.Game.prototype = {
 		}
 		else if (this.keys.down.isDown) {
 			this.ball.body.velocity.y += this.movementForce;
+		}*/
+
+		collision = false;
+		for (i = 0; i < this.levels[this.level - 1].children.length; i++) {
+			if (this.checkOverlap(this.ball, this.levels[this.level - 1].children[i])) {	
+				collision = true;
+			}
 		}
+
+		if(collision){
+			console.log('Drag the sprites. Overlapping: true');
+				//console.log(this.input._oldPosition);
+				//console.log(this.ball.position);
+				//this.ball.position.x = this.input._oldPosition.x;
+				//this.ball.position.y = this.input._oldPosition.y;
+				//console.log("old: " + this.ball.position);
+				//console.log(this.ball.events.onDragStop);
+				//this.ball.events.onDragStop = true;
+				//console.log(this.ball.events.onDragStop);
+				this.ball.input.draggable = false;
+				this.ball.position = this.prevPos;
+				//console.log("new: " + this.ball.position);
+		}
+		else {
+			console.log('Drag the sprites. Overlapping: false');
+			this.prevPos = this.ball.position;
+			this.ball.input.draggable = true;
+		}
+
+
+		//console.log(this.ball);
+		//console.log("pos x: " + this.ball.x);
+		//console.log("pos y: " + this.ball.y);
+
 		//Add physics for collisions with walls.
 		this.physics.arcade.collide(this.ball, this.borderGroup, this.wallCollision, null, this);
 		this.physics.arcade.collide(this.ball, this.levels[this.level - 1], this.wallCollision, null, this);
 		this.physics.arcade.overlap(this.ball, this.hole, this.finishLevel, null, this);
 	},
+
+	checkOverlap: function (spriteA, spriteB) {
+
+		var boundsA = spriteA.getBounds();
+		//console.log("Ball: " + boundsA);
+		var boundsB = spriteB.getBounds();
+		//console.log("Walls: " + boundsB);
+
+		return Phaser.Rectangle.intersects(boundsA, boundsB);
+
+	},
+
 	wallCollision: function () {
+		console.log("wall collision");
 		//Here we see what happens when we hit a wall. Maybe we can add a hit counter here?
-		if (this.audioStatus) {
+		/*if (this.audioStatus) {
 			this.bounceSound.play();
-		}
+		}*/
 		// Vibration API. Should we keep this??
-		if ("vibrate" in window.navigator) {
+		/*if ("vibrate" in window.navigator) {
 			window.navigator.vibrate(100);
-		}
+		}*/
 		this.totalCollisions++;
 		this.totalCollisionsText.setText("Total collisions: " + this.totalCollisions);
 	},
-	handleOrientation: function (e) {
+	/*handleOrientation: function (e) {
 		//Prob don't need this.
 		// Device Orientation API
 		var x = e.gamma; // range [-90,90], left-right
@@ -211,20 +259,8 @@ Ball.Game.prototype = {
 		var z = e.alpha; // range [0,360], up-down
 		Ball._player.body.velocity.x += x;
 		Ball._player.body.velocity.y += y * 0.5;
-	},
-	clicked: function (pointer, x, y) {
-		if (pointer.isDown){
-			//console.log("is down");
-			this.down = true;
-			console.log(pointer);
-			console.log("x: "+x);
-			console.log("y: "+y);
-		}
-		else {
-			this.down = false;
-		}
-	},
-	
+	},*/
+
 	finishLevel: function () {
 		//This decide what happens when we finish the level. We should probably show a new screen instead of a popup window
 		if (this.level >= this.maxLevels) {
