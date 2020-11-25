@@ -15,7 +15,12 @@ Ball.Game.prototype = {
 		this.movementForce = 10;
 		this.ballStartPos = { x: Ball._WIDTH * 0.5, y: 450 };
 		this.down = false;
+		this.prevCollision = false;
 
+		this.game.prevPos = [];
+
+		//this.timerText = this.game.add.text(15, 15, "Time: " + this.timer, this.fontBig);
+		//this.levelText = this.game.add.text(120, 10, "Level: " + this.level + " / " + this.maxLevels, this.fontSmall);
 		//Create buttons
 		/*
 		this.pauseButton = this.add.button(Ball._WIDTH-8, 8, 'button-pause', this.managePause, this);
@@ -35,9 +40,9 @@ Ball.Game.prototype = {
 
 		//Create the goal of the game, the hole
 		this.hole = this.add.sprite(Ball._WIDTH * 0.5, 90, 'hole');
-		this.physics.enable(this.hole, Phaser.Physics.ARCADE);
+		//this.physics.enable(this.hole, Phaser.Physics.ARCADE);
 		this.hole.anchor.set(0.5);
-		this.hole.body.setSize(2, 2);
+		//this.hole.body.setSize(2, 2);
 
 		//Create the ball and add physics
 		this.ball = this.add.sprite(this.ballStartPos.x, this.ballStartPos.y, 'ball');
@@ -46,32 +51,31 @@ Ball.Game.prototype = {
 		this.ball.body.setSize(18, 18);
 		this.ball.body.bounce.set(0.3, 0.3);
 
+		this.cursor = this.add.sprite(this.ballStartPos.x, this.ballStartPos.y, 'ball');
+		this.cursor.alpha = 0;
+
+
+
+		//var latestGood = this.ball.position;
+		//Input from keyboard
+		this.keys = this.game.input.keyboard.createCursorKeys();
+
+
+
+		//  Input Enable the sprites
+		this.ball.inputEnabled = true;
+
+		//  Allow dragging - the 'true' parameter will make the sprite snap to the center
+		this.ball.input.enableDrag(true);
+		//console.log(this.ball.events);
 
 		//Initialise levels
 		this.initLevels();
 		this.showLevel(1);
 
-		//User input
-		this.keys = this.game.input.keyboard.createCursorKeys();
-		this.playerInput = this.game.input.addMoveCallback(this.clicked, this.ball);
-		//this.playerInput = setInteractiveCandidateHandler(this.clicked, this);
-		//mouse+touch
-		//this.game.input.onHold.add(this.clicked, this);
-		
-		/*if (this.game.input.isDown){
-			console.log("is down");
-		}*/
-		/*
-		var mySignal = new Phaser.Signal();
-		
-		mySignal.dispatch(this.game.input.pointer.isDown);
-		mySignal.add(this.clicked, this);
-		*/
-
-		//this.game.input.onDown.add(function() { console.log("clicked") });
 		//Create player and input from device as orientation
 		Ball._player = this.ball;
-		window.addEventListener("deviceorientation", this.handleOrientation, true);
+		//window.addEventListener("deviceorientation", this.handleOrientation, true);
 
 		//Update game every second (only timer or everything?)
 		this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
@@ -85,6 +89,10 @@ Ball.Game.prototype = {
 		this.borderGroup.create(Ball._WIDTH - 2, 0, 'border-vertical');
 		this.borderGroup.setAll('body.immovable', true);
 		this.bounceSound = this.game.add.audio('audio-bounce');
+
+		//this.ball.body.collideWorldBounds = true;
+		//this.ball.body.bounce.set(0.9);
+
 	},
 	initLevels: function () {
 		//This is where we create the levels!!!
@@ -155,76 +163,84 @@ Ball.Game.prototype = {
 		this.timerText.setText("Time: " + this.timer);
 		//this.totalTimeText.setText("Total time: "+(this.totalTimer+this.timer));
 	},
-	/*managePause: function() {
-		//Pause button. Probably should be removed
-		this.game.paused = true;
-		var pausedText = this.add.text(Ball._WIDTH*0.5, 250, "Game paused,\ntap anywhere to continue.", this.fontMessage);
-		pausedText.anchor.set(0.5);
-		this.input.onDown.add(function(){
-			pausedText.destroy();
-			this.game.paused = false;
-		}, this);
-	},*/
-	/*manageAudio: function() {
-		//The audio, which also should be removed?
-		this.audioStatus =! this.audioStatus;
-		this.audioButton.animations.play(this.audioStatus);
-	},*/
+
 	update: function () {
-		//Input from user, should change to touch
-		if (this.keys.left.isDown) {
-			this.ball.body.velocity.x -= this.movementForce;
+
+		//console.log("at start of update, Previous position: " + this.game.prevPos)
+		//console.log("Input: ", this.game.input);
+		//console.log("Pointer pos: ", this.game.input.activePointer.position);
+		//console.log("Ball pos: ", this.ball.position);
+
+		//Check if the level is finished
+		if (this.checkOverlap(this.ball, this.hole)) { this.finishLevel() }
+
+		//Check if the user is pressing the mouse or touch down
+		if (this.game.input.activePointer.isDown) {
+			this.cursor.position.x = this.game.input.activePointer.position.x;
+			this.cursor.position.y = this.game.input.activePointer.position.y;
 		}
-		else if (this.keys.right.isDown) {
-			this.ball.body.velocity.x += this.movementForce;
+
+
+
+		//Start by setting collision to false
+		collision = false;
+
+		//In a for loop, check all walls in the game and see if the user is colliding or overlapping with the walls.
+		for (i = 0; i < this.levels[this.level - 1].children.length; i++) {
+			if (this.checkOverlap(this.cursor, this.levels[this.level - 1].children[i])) {
+				//If they overlap with at least one wall we set the collision to true.
+				collision = true;
+			}
 		}
-		if (this.keys.up.isDown) {
-			this.ball.body.velocity.y -= this.movementForce;
-		}
-		else if (this.keys.down.isDown) {
-			this.ball.body.velocity.y += this.movementForce;
-		}
-		//Add physics for collisions with walls.
-		this.physics.arcade.collide(this.ball, this.borderGroup, this.wallCollision, null, this);
-		this.physics.arcade.collide(this.ball, this.levels[this.level - 1], this.wallCollision, null, this);
-		this.physics.arcade.overlap(this.ball, this.hole, this.finishLevel, null, this);
-	},
-	wallCollision: function () {
-		//Here we see what happens when we hit a wall. Maybe we can add a hit counter here?
-		if (this.audioStatus) {
-			this.bounceSound.play();
-		}
-		// Vibration API. Should we keep this??
-		
-		if ("vibrate" in window.navigator) {
-			window.navigator.vibrate(100);
-		}
-		this.totalCollisions++;
-		this.totalCollisionsText.setText("Total collisions: " + this.totalCollisions);
-	},
-	handleOrientation: function (e) {
-		//Prob don't need this.
-		// Device Orientation API
-		var x = e.gamma; // range [-90,90], left-right
-		var y = e.beta;  // range [-180,180], top-bottom
-		var z = e.alpha; // range [0,360], up-down
-		Ball._player.body.velocity.x += x;
-		Ball._player.body.velocity.y += y * 0.5;
-	},
-	clicked: function (pointer, x, y) {
-		if (pointer.isDown){
-			//console.log("is down");
-			this.down = true;
-			console.log(pointer);
-			console.log("x: "+x);
-			console.log("y: "+y);
+		//console.log("Collission check complete, current prevpos: " + this.game.prevPos)
+
+		//If the user collided with any of the walls we set the position of the ball to the third latest position. I should probably make this better
+		if (collision) {
+			//console.log('Overlapping: true');
+			if (this.ball.input.isDragged) {	//Double check that we are actually moving the ball
+				//If we have a collision with the ball we call the wallCollision function
+				this.wallCollision(collision);	//Now it's being called every frame we collide, maybe we want to use this to count the time colliding??
+				var previous = this.game.prevPos[0];
+				this.ball.position.x = previous[0];
+				this.ball.position.y = previous[1];
+			}
 		}
 		else {
-			this.down = false;
+			//If we don't find any overlaps we add the current position of the ball in the prevPos array
+			//console.log('Overlapping: false');
+
+			//console.log("found no overlaps, current prevPos: " + this.game.prevPos)
+			var latestGood = [this.ball.position.x, this.ball.position.y];
+			this.game.prevPos.push(latestGood);
+			if (this.game.prevPos.length > 3) {
+				this.game.prevPos.shift();
+			}
+
+			// console.log("reassigned prevPos, current value: " + this.ball.prevPos)
+
+		}
+		this.prevCollision = collision;
+		//console.log("At end of update loop, prevPos: " + this.game.prevPos)
+	},
+
+	checkOverlap: function (spriteA, spriteB) {
+		//Check if two sprites overlap, or "collide"
+		var boundsA = spriteA.getBounds();
+		var boundsB = spriteB.getBounds();
+		return Phaser.Rectangle.intersects(boundsA, boundsB);
+	},
+
+	wallCollision: function (collission) {
+		//console.log("wall collision");
+		//Here we see what happens when we hit a wall.
+		if (!this.prevCollision) {
+			this.totalCollisions++;
+			this.totalCollisionsText.setText("Total collisions: " + this.totalCollisions);
 		}
 	},
-	
+
 	finishLevel: function () {
+
 		//This decide what happens when we finish the level. We should probably show a new screen instead of a popup window
 		if (this.level >= this.maxLevels) {
 			this.totalTimer += this.timer;
