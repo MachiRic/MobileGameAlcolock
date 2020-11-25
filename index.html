@@ -6,7 +6,7 @@
     <style> body { margin: 0; background: rgb(255, 255, 255); } </style>
     <!--Import the phaser framework-->
     <!--<script src="//cdn.jsdelivr.net/npm/phaser@2.2.2/dist/phaser.min.js"></script>-->
-
+    
     <script src="//cdn.jsdelivr.net/phaser/2.6.2/phaser.js"></script>
    
     <!--Import the other files the game consists of-->
@@ -15,6 +15,7 @@
     <script src="./src/MainMenu.js"></script>
     <script src="./src/Howto.js"></script>
     <script src="./src/Game.js"></script>
+    <script src="./src/Result.js"></script>
 </head>
 
 <body>
@@ -26,6 +27,7 @@
     game.state.add('MainMenu', Ball.MainMenu);
     game.state.add('Howto', Ball.Howto);
     game.state.add('Game', Ball.Game);
+    game.state.add('Result', Ball.Result);
     game.state.start('Boot');
 })();
 </script>

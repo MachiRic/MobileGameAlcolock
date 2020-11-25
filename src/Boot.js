@@ -1,6 +1,11 @@
+//store all the UI parameters in the Ball structure
 var Ball = {
     _WIDTH: 320,
-    _HEIGHT: 480
+    _HEIGHT: 480,
+    fontSmall: { font: "16px Arial"},
+    fontBig: { font: "24px Arial"},
+    fontHuge: { font: "44px Arial"},
+    white: {fill: "#FFFFFF"}
 };
 Ball.Boot = function(game) {};
 Ball.Boot.prototype = {

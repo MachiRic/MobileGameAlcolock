@@ -5,9 +5,7 @@ Ball.Game.prototype = {
 		this.add.sprite(0, 0, 'screen-bg');
 		this.add.sprite(0, 0, 'panel');
 		this.physics.startSystem(Phaser.Physics.ARCADE);	//Physics
-		this.fontSmall = { font: "16px Arial", fill: "#e4beef" };
-		this.fontBig = { font: "24px Arial", fill: "#e4beef" };
-		this.fontMessage = { font: "24px Arial", fill: "#e4beef", align: "center", stroke: "#320C3E", strokeThickness: 4 };
+		//this.fontMessage = { font: "24px Arial", fill: "#e4beef", align: "center", stroke: "#320C3E", strokeThickness: 4 };
 		this.audioStatus = true;
 		this.timer = 0;
 		this.totalTimer = 0;
@@ -21,10 +19,24 @@ Ball.Game.prototype = {
 
 		this.game.prevPos = [];
 
-		this.timerText = this.game.add.text(15, 15, "Time: " + this.timer, this.fontBig);
-		this.levelText = this.game.add.text(120, 10, "Level: " + this.level + " / " + this.maxLevels, this.fontSmall);
+		//this.timerText = this.game.add.text(15, 15, "Time: " + this.timer, this.fontBig);
+		//this.levelText = this.game.add.text(120, 10, "Level: " + this.level + " / " + this.maxLevels, this.fontSmall);
+		//Create buttons
+		/*
+		this.pauseButton = this.add.button(Ball._WIDTH-8, 8, 'button-pause', this.managePause, this);
+		this.pauseButton.anchor.set(1,0);
+		this.pauseButton.input.useHandCursor = true;
+		this.audioButton = this.add.button(Ball._WIDTH-this.pauseButton.width-8*2, 8, 'button-audio', this.manageAudio, this);
+		this.audioButton.anchor.set(1,0);
+		this.audioButton.input.useHandCursor = true;
+		this.audioButton.animations.add('true', [0], 10, true);
+		this.audioButton.animations.add('false', [1], 10, true);
+		this.audioButton.animations.play(this.audioStatus);
+		*/
+		this.timerText = this.game.add.text(15, 15, "Time: " + this.timer, {...Ball.fontBig, ...Ball.white});
+		//this.levelText = this.game.add.text(120, 10, "Level: " + this.level + " / " + this.maxLevels, {...Ball.fontSmall, ...Ball.white});
 		//this.totalTimeText = this.game.add.text(120, 30, "Total time: "+this.totalTimer, this.fontSmall );
-		this.totalCollisionsText = this.game.add.text(120, 30, "Total collisions: " + this.totalCollisions, this.fontSmall);
+		this.totalCollisionsText = this.game.add.text(120, 15, "Total collisions: " + this.totalCollisions, {...Ball.fontBig, ...Ball.white});
 
 		//Create the goal of the game, the hole
 		this.hole = this.add.sprite(Ball._WIDTH * 0.5, 90, 'hole');
@@ -232,8 +244,9 @@ Ball.Game.prototype = {
 		//This decide what happens when we finish the level. We should probably show a new screen instead of a popup window
 		if (this.level >= this.maxLevels) {
 			this.totalTimer += this.timer;
-			alert('Congratulations, game completed!\nTotal time of play: ' + this.totalTimer + ' seconds!');
-			this.game.state.start('MainMenu');
+			//alert('Congratulations, game completed!\nTotal time of play: ' + this.totalTimer + ' seconds!');
+			//this.game.state.start('MainMenu');
+			this.game.state.start('Result');
 		}
 		else {
 			//Change this to a new screen instead of popup!
