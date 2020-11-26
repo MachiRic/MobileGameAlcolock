@@ -1,7 +1,7 @@
 //store all the common UI parameters in the Ball structure
 var Ball = {
     fontSmall: { font: "26px joystix"},
-    fontBig: { font: "48px joystix"},
+    fontBig: { font: "34px joystix"},
     fontHuge: { font: "72px joystix"},
     white: {fill: "#FFFFFF"}
 };
