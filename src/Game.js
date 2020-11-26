@@ -1,9 +1,9 @@
 Ball.Game = function (game) { };
 Ball.Game.prototype = {
 	create: function () {
+		//game background
+		this.stage.backgroundColor = "#ffffff"; //background
 		//Create the look of the game and the physics
-		this.add.sprite(0, 0, 'screen-bg');
-		this.add.sprite(0, 0, 'panel');
 		this.physics.startSystem(Phaser.Physics.ARCADE);	//Physics
 		//this.fontMessage = { font: "24px Arial", fill: "#e4beef", align: "center", stroke: "#320C3E", strokeThickness: 4 };
 		this.audioStatus = true;
@@ -13,7 +13,7 @@ Ball.Game.prototype = {
 		this.level = 1;
 		this.maxLevels = 1;
 		this.movementForce = 10;
-		this.ballStartPos = { x: Ball._WIDTH * 0.5, y: 450 };
+		this.ballStartPos = { x: Ball._WIDTH * 0.5, y: Ball._HEIGHT*0.95 };
 		this.down = false;
 		this.prevCollision = false;
 
@@ -33,13 +33,9 @@ Ball.Game.prototype = {
 		this.audioButton.animations.add('false', [1], 10, true);
 		this.audioButton.animations.play(this.audioStatus);
 		*/
-		this.timerText = this.game.add.text(15, 15, "Time: " + this.timer, {...Ball.fontBig, ...Ball.white});
-		//this.levelText = this.game.add.text(120, 10, "Level: " + this.level + " / " + this.maxLevels, {...Ball.fontSmall, ...Ball.white});
-		//this.totalTimeText = this.game.add.text(120, 30, "Total time: "+this.totalTimer, this.fontSmall );
-		this.totalCollisionsText = this.game.add.text(120, 15, "Total collisions: " + this.totalCollisions, {...Ball.fontBig, ...Ball.white});
-
+		
 		//Create the goal of the game, the hole
-		this.hole = this.add.sprite(Ball._WIDTH * 0.5, 90, 'hole');
+		this.hole = this.add.sprite(Ball._WIDTH * 0.5, Ball._HEIGHT*0.15, 'hole');
 		//this.physics.enable(this.hole, Phaser.Physics.ARCADE);
 		this.hole.anchor.set(0.5);
 		//this.hole.body.setSize(2, 2);
@@ -83,12 +79,25 @@ Ball.Game.prototype = {
 		this.borderGroup = this.add.group();
 		this.borderGroup.enableBody = true;
 		this.borderGroup.physicsBodyType = Phaser.Physics.ARCADE;
-		this.borderGroup.create(0, 50, 'border-horizontal');
-		this.borderGroup.create(0, Ball._HEIGHT - 2, 'border-horizontal');
-		this.borderGroup.create(0, 0, 'border-vertical');
-		this.borderGroup.create(Ball._WIDTH - 2, 0, 'border-vertical');
+		this.border = this.game.add.graphics();
+		this.border.lineStyle(8, 0x000000, 0.8);
+		this.border.drawRect(0, 0, Ball._WIDTH, Ball._HEIGHT);
+		this.panel = this.game.add.graphics();
+		this.panel.beginFill(0x000000, 0.8);
+		this.panel.drawRect(0, 0, Ball._WIDTH, Ball._HEIGHT * 0.1);
+		this.borderGroup.add(this.panel);
 		this.borderGroup.setAll('body.immovable', true);
-		this.bounceSound = this.game.add.audio('audio-bounce');
+		//this.bounceSound = this.game.add.audio('audio-bounce');
+
+		this.timerText = this.game.add.text(0.05*Ball._WIDTH, Ball._HEIGHT * 0.05, "Time: " + this.timer, {...Ball.fontBig, ...Ball.white});
+		this.timerText.anchor.setTo(0, 0.5);
+		this.totalCollisionsText = this.game.add.text(0.4*Ball._WIDTH, Ball._HEIGHT * 0.05, "Collisions: " + this.totalCollisions, {...Ball.fontBig, ...Ball.white});
+		this.totalCollisionsText.anchor.setTo(0, 0.5);
+
+		//this.startButton[1].lineStyle(4, 0xffffff, 1);
+		//this.startButton[1].drawRect(-Ball._WIDTH * 0.225, -Ball._HEIGHT * 0.025, Ball._WIDTH * 0.45, Ball._HEIGHT * 0.05);
+
+		
 
 		//this.ball.body.collideWorldBounds = true;
 		//this.ball.body.bounce.set(0.9);
