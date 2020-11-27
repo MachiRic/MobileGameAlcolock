@@ -101,7 +101,7 @@ Ball.Game.prototype = {
 		this.debugLog ="";
 		this.debugText = this.game.add.text(0.4*Ball._WIDTH, Ball._HEIGHT * 0.05, "Debug: " + this.debugLog, {...Ball.fontBig, ...Ball.white});
 		this.debugText.anchor.setTo(0, 0.5);
-		this.debugCollisionsText.scale.setTo(Ball.scaleFactor);
+		this.debugText.scale.setTo(Ball.scaleFactor);
 		//this.startButton[1].lineStyle(4, 0xffffff, 1);
 		//this.startButton[1].drawRect(-Ball._WIDTH * 0.225, -Ball._HEIGHT * 0.025, Ball._WIDTH * 0.45, Ball._HEIGHT * 0.05);
 
