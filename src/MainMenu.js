@@ -12,8 +12,10 @@ Ball.MainMenu.prototype = {
 		//title
 		this.title = this.add.text(Ball._WIDTH * 0.1, Ball._HEIGHT * 1.0 / 3.0, 'Maze', { font: "200px 3Dpixel", ...Ball.white });
 		this.title.anchor.setTo(0, 1);
+		this.title.scale.setTo(Ball.scaleFactor);
 		this.subTitle = this.add.text(Ball._WIDTH * 0.9, Ball._HEIGHT * (1.0 / 3.0 - 1.0 / 10.0), 'Alcolock', { font: "125px 3Dpixel", ...Ball.white });
 		this.subTitle.anchor.setTo(1, 1);
+		this.subTitle.scale.setTo(Ball.scaleFactor);
 		//game start button
 		//graphics
 		this.startButton = [];
@@ -21,6 +23,7 @@ Ball.MainMenu.prototype = {
 		this.startButton.push(this.game.add.graphics()); //background
 		this.startButton.push(this.game.add.text(0, 0, "Start Test", {...Ball.fontBig, ...Ball.white})); //text
 		this.startButton[2].anchor.setTo(0.5);
+		this.startButton[2].scale.setTo(Ball.scaleFactor);
 		this.startButton[0].beginFill(0xffffff, 0);
 		this.startButton[0].drawRect(-Ball._WIDTH * 0.225, -Ball._HEIGHT * 0.025, Ball._WIDTH * 0.45, Ball._HEIGHT * 0.05);
 		this.startButton[0].endFill();
