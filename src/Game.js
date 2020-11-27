@@ -184,10 +184,10 @@ Ball.Game.prototype = {
 		if (this.checkOverlap(this.ball, this.hole)) { this.finishLevel() }
 
 		//Check if the user is pressing the mouse or touch down
-		if (this.game.input.activePointer.isDown) {
+		//if (this.game.input.activePointer.isDown) {
 			this.cursor.position.x = this.game.input.activePointer.position.x;
 			this.cursor.position.y = this.game.input.activePointer.position.y;
-		}
+		//}
 
 
 
