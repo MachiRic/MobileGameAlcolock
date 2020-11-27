@@ -38,13 +38,15 @@ Ball.Game.prototype = {
 		this.hole = this.add.sprite(Ball._WIDTH * 0.5, Ball._HEIGHT * 0.15, 'hole');
 		//this.physics.enable(this.hole, Phaser.Physics.ARCADE);
 		this.hole.anchor.set(0.5);
+		this.hole.scale.setTo(Ball.scaleFactor);
 		//this.hole.body.setSize(2, 2);
 
 		//Create the ball and add physics
 		this.ball = this.add.sprite(this.ballStartPos.x, this.ballStartPos.y, 'ball');
 		this.ball.anchor.set(0.5);
+		this.ball.scale.setTo(Ball.scaleFactor);
 		this.physics.enable(this.ball, Phaser.Physics.ARCADE);
-		this.ball.body.setSize(18, 18);
+		this.ball.body.setSize(this.ball.width, this.ball.height);
 		this.ball.body.bounce.set(0.3, 0.3);
 
 		this.cursor = this.add.sprite(0, 0, 'ball');
@@ -91,8 +93,10 @@ Ball.Game.prototype = {
 
 		this.timerText = this.game.add.text(0.05 * Ball._WIDTH, Ball._HEIGHT * 0.05, "Time: " + this.timer, { ...Ball.fontBig, ...Ball.white });
 		this.timerText.anchor.setTo(0, 0.5);
-		this.totalCollisionsText = this.game.add.text(0.4 * Ball._WIDTH, Ball._HEIGHT * 0.05, "Collisions: " + this.totalCollisions, { ...Ball.fontBig, ...Ball.white });
+		this.timerText.scale.setTo(Ball.scaleFactor);
+		this.totalCollisionsText = this.game.add.text(0.4*Ball._WIDTH, Ball._HEIGHT * 0.05, "Collisions: " + this.totalCollisions, {...Ball.fontBig, ...Ball.white});
 		this.totalCollisionsText.anchor.setTo(0, 0.5);
+		this.totalCollisionsText.scale.setTo(Ball.scaleFactor);
 
 		//this.startButton[1].lineStyle(4, 0xffffff, 1);
 		//this.startButton[1].drawRect(-Ball._WIDTH * 0.225, -Ball._HEIGHT * 0.025, Ball._WIDTH * 0.45, Ball._HEIGHT * 0.05);
