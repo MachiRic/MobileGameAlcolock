@@ -24,14 +24,15 @@
     //responsive
     //var resWidth = window.innerWidth * window.devicePixelRatio;
     //var resHeight = window.innerHeight * window.devicePixelRatio;
-    var resWidth = 375 * 2;
-    var resHeight = 667 * 2;
+    var resWidth = 1440;
+    var resHeight = 2960;
     console.log(window.innerWidth);
     console.log(window.devicePixelRatio);
     console.log(resWidth);
     var game = new Phaser.Game(resWidth, resHeight, Phaser.AUTO, 'game');
     Ball._WIDTH = resWidth;
     Ball._HEIGHT = resHeight;
+    Ball.scaleFactor = resWidth / 750.0;
     game.state.add('Boot', Ball.Boot);
     game.state.add('Preloader', Ball.Preloader);
     game.state.add('MainMenu', Ball.MainMenu);
