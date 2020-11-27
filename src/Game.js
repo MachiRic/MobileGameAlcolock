@@ -256,7 +256,7 @@ Ball.Game.prototype = {
 			console.log("cursor: ", this.cursor._bounds)
 			console.log("Overlapping ball: ", Phaser.Rectangle.intersects(boundsA, boundsB), ", Bounds ball: ", boundsA, ", Bounds cursor: ", boundsB, ", Cursor position: ", this.cursor.position);
 			if (this.checkOverlap(this.ball, curserHolder)) {
-				if (touchStartCallback){
+				if (this.game.input.touch.touchStartCallback){
 					if (boundsB.x == this.cursor.position.x && boundsB.y == this.cursor.position.y) {
 						console.log("pos in bounds is the same")
 						this.ball.position.x = curserHolder.position.x;
@@ -264,7 +264,7 @@ Ball.Game.prototype = {
 					}
 					console.log("Pos in bounds not the same");
 				}
-				else if (touchMoveCallback){
+				else if (this.game.input.touch.touchMoveCallback){
 					this.ball.position.x = curserHolder.position.x;
 					this.ball.position.y = curserHolder.position.y;
 				}
