@@ -62,7 +62,7 @@ Ball.Game.prototype = {
 		this.ball.inputEnabled = true;
 
 		//  Allow dragging - the 'true' parameter will make the sprite snap to the center
-		this.ball.input.enableDrag(true);
+		//this.ball.input.enableDrag(true);
 		//console.log(this.ball.events);
 
 		//Initialise levels
@@ -206,27 +206,33 @@ Ball.Game.prototype = {
 		//If the user collided with any of the walls we set the position of the ball to the third latest position. I should probably make this better
 		if (collision) {
 			//console.log('Overlapping: true');
-			if (this.ball.input.isDragged) {	//Double check that we are actually moving the ball
+			//if (this.ball.input.isDragged) {	//Double check that we are actually moving the ball
+			if (this.checkOverlap(this.cursor, this.ball)) {
 				//If we have a collision with the ball we call the wallCollision function
 				this.wallCollision(collision);	//Now it's being called every frame we collide, maybe we want to use this to count the time colliding??
-				var previous = this.game.prevPos[0];
-				this.ball.position.x = previous[0];
-				this.ball.position.y = previous[1];
+				//var previous = this.game.prevPos[0];
+				//this.ball.position.x = previous[0];
+				//this.ball.position.y = previous[1];
 			}
+
+			//}
 		}
 		else {
 			//If we don't find any overlaps we add the current position of the ball in the prevPos array
 			//console.log('Overlapping: false');
-
+			if (this.checkOverlap(this.cursor, this.ball)) {
+				//console.log("Dragging ball");
+				this.ball.position.x = this.cursor.position.x;
+				this.ball.position.y = this.cursor.position.y;
 			//console.log("found no overlaps, current prevPos: " + this.game.prevPos)
-			var latestGood = [this.ball.position.x, this.ball.position.y];
-			this.game.prevPos.push(latestGood);
-			if (this.game.prevPos.length > 3) {
-				this.game.prevPos.shift();
-			}
+			//var latestGood = [this.ball.position.x, this.ball.position.y];
+			//this.game.prevPos.push(latestGood);
+			//if (this.game.prevPos.length > 3) {
+			//	this.game.prevPos.shift();
+			//}
 
 			// console.log("reassigned prevPos, current value: " + this.ball.prevPos)
-
+			}
 		}
 		this.prevCollision = collision;
 		//console.log("At end of update loop, prevPos: " + this.game.prevPos)
