@@ -179,7 +179,7 @@ Ball.Game.prototype = {
 
 	update: function () {
 
-		console.log("at start of update, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
+		//console.log("at start of update, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
 		//console.log("at start of update, Previous position: " + this.game.prevPos)
 		//console.log("Input: ", this.game.input);
 		//console.log("Pointer pos: ", this.game.input.activePointer.position);
@@ -188,7 +188,7 @@ Ball.Game.prototype = {
 		//Check if the level is finished
 		if (this.checkOverlap(this.ball, this.hole)) { this.finishLevel() }
 
-		console.log(this.game.input);
+		//console.log(this.game.input);
 		console.log("Touch events: ", this.game.input.touch.events)
 		var inputPos = [this.game.input.activePointer.position.x, this.game.input.activePointer.position.y];
 
@@ -196,26 +196,26 @@ Ball.Game.prototype = {
 		if (this.game.input.activePointer.isMouse) {
 			//console.log("mouse")
 			if (this.game.input.activePointer.isDown) {
-				console.log("is down")
+				//console.log("is down")
 				this.cursor.position.x = inputPos[0];
 				this.cursor.position.y = inputPos[1];
 
 			}
 			else {
-				console.log("not down")
+				//console.log("not down")
 			}
 
 		}
 		else {
-			console.log("not mouse")
+			//console.log("not mouse")
 			if (this.checkOverlap(this.ball, this.cursor)) {
-				console.log("cursor overlaps ball")
+				//console.log("cursor overlaps ball")
 				this.cursor.position.x = inputPos[0];
 				this.cursor.position.y = inputPos[1];
 			}
 		}
 
-		console.log("After updating curser position, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
+		//console.log("After updating curser position, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
 
 
 		//Start by setting collision to false
@@ -230,12 +230,12 @@ Ball.Game.prototype = {
 		}
 		//console.log("Collission check complete, current prevpos: " + this.game.prevPos)
 
-		console.log("Collision check complete, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
+		//console.log("Collision check complete, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
 
 
 		//If the user collided with any of the walls we set the position of the ball to the third latest position. I should probably make this better
 		if (collision) {
-			console.log('Overlapping: true');
+			//console.log('Overlapping: true');
 			//if (this.ball.input.isDragged) {	//Double check that we are actually moving the ball
 			//if (this.checkOverlap(this.cursor, this.ball)) {
 			//If we have a collision with the ball we call the wallCollision function
@@ -250,21 +250,21 @@ Ball.Game.prototype = {
 		else {
 			//If we don't find any overlaps we add the current position of the ball in the prevPos array
 			var curserHolder = this.cursor;
-			console.log('Overlapping: false');
-			console.log("Before ball overlap check, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
+			//console.log('Overlapping: false');
+			//console.log("Before ball overlap check, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
 			//console.log("Overlapping ball: ", this.checkOverlap(this.ball, this.cursor))
 			var boundsA = this.ball.getBounds();
 			var boundsB = this.cursor.getBounds();
-			console.log("cursor: ", this.cursor._bounds)
-			console.log("Overlapping ball: ", Phaser.Rectangle.intersects(boundsA, boundsB), ", Bounds ball: ", boundsA, ", Bounds cursor: ", boundsB, ", Cursor position: ", this.cursor.position);
+			//console.log("cursor: ", this.cursor._bounds)
+			//console.log("Overlapping ball: ", Phaser.Rectangle.intersects(boundsA, boundsB), ", Bounds ball: ", boundsA, ", Bounds cursor: ", boundsB, ", Cursor position: ", this.cursor.position);
 			if (this.checkOverlap(this.ball, curserHolder)) {
 				//if (this.game.input.touch.touchStartCallback){
-					if (boundsB.x == this.cursor.position.x && boundsB.y == this.cursor.position.y) {
-						console.log("pos in bounds is the same")
+					//if (boundsB.x == this.cursor.position.x && boundsB.y == this.cursor.position.y) {
+						//console.log("pos in bounds is the same")
 						this.ball.position.x = curserHolder.position.x;
 						this.ball.position.y = curserHolder.position.y;
-					}
-					console.log("Pos in bounds not the same");
+				//	}
+				//	console.log("Pos in bounds not the same");
 				//}
 				//else if (this.game.input.touch.touchMoveCallback){
 				//	this.ball.position.x = curserHolder.position.x;
@@ -279,13 +279,13 @@ Ball.Game.prototype = {
 				//if (this.game.prevPos.length > 3) {
 				//	this.game.prevPos.shift();
 
-				console.log("Reassigned Ball position, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
+				//console.log("Reassigned Ball position, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
 
 
 			}
 			else {
-				console.log("not over ball")
-				console.log("NOT reassigned Ball position, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
+				//console.log("not over ball")
+				//console.log("NOT reassigned Ball position, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
 
 			}
 
@@ -295,7 +295,7 @@ Ball.Game.prototype = {
 			//}
 		}
 		this.prevCollision = collision;
-		console.log("At end of update loop, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
+		//console.log("At end of update loop, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
 
 		//console.log("At end of update loop, prevPos: " + this.game.prevPos)
 	},
