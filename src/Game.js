@@ -94,10 +94,14 @@ Ball.Game.prototype = {
 		this.timerText = this.game.add.text(0.05 * Ball._WIDTH, Ball._HEIGHT * 0.05, "Time: " + this.timer, { ...Ball.fontBig, ...Ball.white });
 		this.timerText.anchor.setTo(0, 0.5);
 		this.timerText.scale.setTo(Ball.scaleFactor);
-		this.totalCollisionsText = this.game.add.text(0.4*Ball._WIDTH, Ball._HEIGHT * 0.05, "Collisions: " + this.totalCollisions, {...Ball.fontBig, ...Ball.white});
-		this.totalCollisionsText.anchor.setTo(0, 0.5);
-		this.totalCollisionsText.scale.setTo(Ball.scaleFactor);
+		//this.totalCollisionsText = this.game.add.text(0.4*Ball._WIDTH, Ball._HEIGHT * 0.05, "Collisions: " + this.totalCollisions, {...Ball.fontBig, ...Ball.white});
+		//this.totalCollisionsText.anchor.setTo(0, 0.5);
+		//this.totalCollisionsText.scale.setTo(Ball.scaleFactor);
 
+		this.debugLog ="";
+		this.debugText = this.game.add.text(0.4*Ball._WIDTH, Ball._HEIGHT * 0.05, "Debug: " + this.debugLog, {...Ball.fontBig, ...Ball.white});
+		this.debugText.anchor.setTo(0, 0.5);
+		this.debugCollisionsText.scale.setTo(Ball.scaleFactor);
 		//this.startButton[1].lineStyle(4, 0xffffff, 1);
 		//this.startButton[1].drawRect(-Ball._WIDTH * 0.225, -Ball._HEIGHT * 0.025, Ball._WIDTH * 0.45, Ball._HEIGHT * 0.05);
 
@@ -246,6 +250,8 @@ Ball.Game.prototype = {
 			//}
 		}
 		else {
+
+			this.debugLog = this.game.input.touch.event;
 			//If we don't find any overlaps we add the current position of the ball in the prevPos array
 			var curserHolder = this.cursor;
 			console.log('Overlapping: false');
@@ -256,18 +262,18 @@ Ball.Game.prototype = {
 			console.log("cursor: ", this.cursor._bounds)
 			console.log("Overlapping ball: ", Phaser.Rectangle.intersects(boundsA, boundsB), ", Bounds ball: ", boundsA, ", Bounds cursor: ", boundsB, ", Cursor position: ", this.cursor.position);
 			if (this.checkOverlap(this.ball, curserHolder)) {
-				if (this.game.input.touch.touchStartCallback){
+				//if (this.game.input.touch.touchStartCallback){
 					if (boundsB.x == this.cursor.position.x && boundsB.y == this.cursor.position.y) {
 						console.log("pos in bounds is the same")
 						this.ball.position.x = curserHolder.position.x;
 						this.ball.position.y = curserHolder.position.y;
 					}
 					console.log("Pos in bounds not the same");
-				}
-				else if (this.game.input.touch.touchMoveCallback){
-					this.ball.position.x = curserHolder.position.x;
-					this.ball.position.y = curserHolder.position.y;
-				}
+				//}
+				//else if (this.game.input.touch.touchMoveCallback){
+				//	this.ball.position.x = curserHolder.position.x;
+				//	this.ball.position.y = curserHolder.position.y;
+				//}
 				
 
 
