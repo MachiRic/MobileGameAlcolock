@@ -250,7 +250,7 @@ Ball.Game.prototype = {
 		//Here we see what happens when we hit a wall.
 		if (!this.prevCollision) {
 			this.totalCollisions++;
-			this.totalCollisionsText.setText("Total collisions: " + this.totalCollisions);
+			this.totalCollisionsText.setText("Collisions: " + this.totalCollisions);
 		}
 	},
 
