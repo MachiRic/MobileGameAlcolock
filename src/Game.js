@@ -94,14 +94,10 @@ Ball.Game.prototype = {
 		this.timerText = this.game.add.text(0.05 * Ball._WIDTH, Ball._HEIGHT * 0.05, "Time: " + this.timer, { ...Ball.fontBig, ...Ball.white });
 		this.timerText.anchor.setTo(0, 0.5);
 		this.timerText.scale.setTo(Ball.scaleFactor);
-		//this.totalCollisionsText = this.game.add.text(0.4*Ball._WIDTH, Ball._HEIGHT * 0.05, "Collisions: " + this.totalCollisions, {...Ball.fontBig, ...Ball.white});
-		//this.totalCollisionsText.anchor.setTo(0, 0.5);
-		//this.totalCollisionsText.scale.setTo(Ball.scaleFactor);
+		this.totalCollisionsText = this.game.add.text(0.4*Ball._WIDTH, Ball._HEIGHT * 0.05, "Collisions: " + this.totalCollisions, {...Ball.fontBig, ...Ball.white});
+		this.totalCollisionsText.anchor.setTo(0, 0.5);
+		this.totalCollisionsText.scale.setTo(Ball.scaleFactor);
 
-		this.debugLog ="";
-		this.debugText = this.game.add.text(0.4*Ball._WIDTH, Ball._HEIGHT * 0.05, "Debug: " + this.debugLog, {...Ball.fontBig, ...Ball.white});
-		this.debugText.anchor.setTo(0, 0.5);
-		this.debugText.scale.setTo(Ball.scaleFactor);
 		//this.startButton[1].lineStyle(4, 0xffffff, 1);
 		//this.startButton[1].drawRect(-Ball._WIDTH * 0.225, -Ball._HEIGHT * 0.025, Ball._WIDTH * 0.45, Ball._HEIGHT * 0.05);
 
@@ -193,6 +189,7 @@ Ball.Game.prototype = {
 		if (this.checkOverlap(this.ball, this.hole)) { this.finishLevel() }
 
 		console.log(this.game.input);
+		console.log("Touch events: ", this.game.input.touch.events)
 		var inputPos = [this.game.input.activePointer.position.x, this.game.input.activePointer.position.y];
 
 		//Check if the user is pressing the mouse or touch down
@@ -210,8 +207,9 @@ Ball.Game.prototype = {
 
 		}
 		else {
-			//console.log("not mouse")
+			console.log("not mouse")
 			if (this.checkOverlap(this.ball, this.cursor)) {
+				console.log("cursor overlaps ball")
 				this.cursor.position.x = inputPos[0];
 				this.cursor.position.y = inputPos[1];
 			}
@@ -250,8 +248,6 @@ Ball.Game.prototype = {
 			//}
 		}
 		else {
-
-			this.debugLog = this.game.input.touch.event;
 			//If we don't find any overlaps we add the current position of the ball in the prevPos array
 			var curserHolder = this.cursor;
 			console.log('Overlapping: false');
