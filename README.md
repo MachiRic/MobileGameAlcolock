@@ -1,5 +1,5 @@
 # MobileGameAlcolock
-This is a prototype made in a course at KTH, of a mobile game that eventually could replace the product called Alcolock. 
+This is a prototype was made during a research project at KTH royal institute of science and technology. The developed prototype is a modification of [Andrzej Mazur](http://end3r.com/) game called [Cyber-Orb](https://github.com/EnclaveGames/Cyber-Orb). 
 
 To run the game locally, download [node.js](https://www.npmjs.com/package/http-server).
 After that, open your preferred command tool and go to your local directory for this repository and run:
