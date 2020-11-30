@@ -4,7 +4,7 @@ Ball.Game.prototype = {
 		//Create the look of the game and the physics
 		this.add.sprite(0, 0, 'screen-bg');
 		this.add.sprite(0, 0, 'panel');
-		this.physics.startSystem(Phaser.Physics.ARCADE);	//Physics
+		//this.physics.startSystem(Phaser.Physics.ARCADE);	//Physics
 		this.fontSmall = { font: "16px Arial", fill: "#e4beef" };
 		this.fontBig = { font: "24px Arial", fill: "#e4beef" };
 		this.fontMessage = { font: "24px Arial", fill: "#e4beef", align: "center", stroke: "#320C3E", strokeThickness: 4 };
@@ -35,9 +35,9 @@ Ball.Game.prototype = {
 		//Create the ball and add physics
 		this.ball = this.add.sprite(this.ballStartPos.x, this.ballStartPos.y, 'ball');
 		this.ball.anchor.set(0.5);
-		this.physics.enable(this.ball, Phaser.Physics.ARCADE);
-		this.ball.body.setSize(18, 18);
-		this.ball.body.bounce.set(0.3, 0.3);
+		//this.physics.enable(this.ball, Phaser.Physics.ARCADE);
+		//this.ball.body.setSize(18, 18);
+		//this.ball.body.bounce.set(0.3, 0.3);
 
 		this.cursor = this.add.sprite(this.ballStartPos.x, this.ballStartPos.y, 'ball');
 		this.cursor.alpha = 0;
@@ -70,7 +70,7 @@ Ball.Game.prototype = {
 
 		this.borderGroup = this.add.group();
 		this.borderGroup.enableBody = true;
-		this.borderGroup.physicsBodyType = Phaser.Physics.ARCADE;
+		//this.borderGroup.physicsBodyType = Phaser.Physics.ARCADE;
 		this.borderGroup.create(0, 50, 'border-horizontal');
 		this.borderGroup.create(0, Ball._HEIGHT - 2, 'border-horizontal');
 		this.borderGroup.create(0, 0, 'border-vertical');
@@ -128,7 +128,7 @@ Ball.Game.prototype = {
 		for (var i = 0; i < this.maxLevels; i++) {
 			var newLevel = this.add.group();
 			newLevel.enableBody = true;
-			newLevel.physicsBodyType = Phaser.Physics.ARCADE;
+			//newLevel.physicsBodyType = Phaser.Physics.ARCADE;
 			for (var e = 0; e < this.levelData[i].length; e++) {
 				var item = this.levelData[i][e];
 				newLevel.create(item.x, item.y, 'element-' + item.t);
