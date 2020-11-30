@@ -269,11 +269,11 @@ Ball.Game.prototype = {
 				//console.log('Overlapping: false');
 				//console.log("Before ball overlap check, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
 				//console.log("Overlapping ball: ", this.checkOverlap(this.ball, this.cursor))
-				var boundsA = this.ball.getBounds();
-				var boundsB = this.cursor.getBounds();
+				//var boundsA = this.ball.getBounds();
+				//var boundsB = this.cursor.getBounds();
 				//console.log("cursor: ", this.cursor._bounds)
 				//console.log("Overlapping ball: ", Phaser.Rectangle.intersects(boundsA, boundsB), ", Bounds ball: ", boundsA, ", Bounds cursor: ", boundsB, ", Cursor position: ", this.cursor.position);
-				//if (this.checkOverlap(this.cursor, this.ball)) {
+				if (this.checkOverlap(this.cursor, this.ball)) {
 					//if (this.game.input.touch.touchStartCallback){
 					//if (boundsB.x == this.cursor.position.x && boundsB.y == this.cursor.position.y) {
 					//console.log("pos in bounds is the same")
@@ -285,7 +285,7 @@ Ball.Game.prototype = {
 					//else if (this.game.input.touch.touchMoveCallback){
 					//	this.ball.position.x = curserHolder.position.x;
 					//	this.ball.position.y = curserHolder.position.y;
-					//}
+					}
 
 
 
