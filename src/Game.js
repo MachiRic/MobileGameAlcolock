@@ -4,7 +4,7 @@ Ball.Game.prototype = {
 		//game background
 		this.stage.backgroundColor = "#ffffff"; //background
 		//Create the look of the game and the physics
-		this.physics.startSystem(Phaser.Physics.ARCADE);	//Physics
+		//this.physics.startSystem(Phaser.Physics.ARCADE);	//Physics
 		//this.fontMessage = { font: "24px Arial", fill: "#e4beef", align: "center", stroke: "#320C3E", strokeThickness: 4 };
 		this.audioStatus = true;
 		this.timer = 0;
@@ -45,9 +45,9 @@ Ball.Game.prototype = {
 		this.ball = this.add.sprite(this.ballStartPos.x, this.ballStartPos.y, 'ball');
 		this.ball.anchor.set(0.5);
 		this.ball.scale.setTo(Ball.scaleFactor);
-		this.physics.enable(this.ball, Phaser.Physics.ARCADE);
-		this.ball.body.setSize(this.ball.width, this.ball.height);
-		this.ball.body.bounce.set(0.3, 0.3);
+		//this.physics.enable(this.ball, Phaser.Physics.ARCADE);
+		//this.ball.body.setSize(this.ball.width, this.ball.height);
+		//this.ball.body.bounce.set(0.3, 0.3);
 
 		this.cursor = this.add.sprite(0, 0, 'ball');
 		this.cursor.alpha = 0;
@@ -80,7 +80,7 @@ Ball.Game.prototype = {
 
 		this.borderGroup = this.add.group();
 		this.borderGroup.enableBody = true;
-		this.borderGroup.physicsBodyType = Phaser.Physics.ARCADE;
+		//this.borderGroup.physicsBodyType = Phaser.Physics.ARCADE;
 		this.border = this.game.add.graphics();
 		this.border.lineStyle(8, 0x000000, 0.8);
 		this.border.drawRect(0, 0, Ball._WIDTH, Ball._HEIGHT);
@@ -153,7 +153,7 @@ Ball.Game.prototype = {
 		for (var i = 0; i < this.maxLevels; i++) {
 			var newLevel = this.add.group();
 			newLevel.enableBody = true;
-			newLevel.physicsBodyType = Phaser.Physics.ARCADE;
+			//newLevel.physicsBodyType = Phaser.Physics.ARCADE;
 			for (var e = 0; e < this.levelData[i].length; e++) {
 				var item = this.levelData[i][e];
 				newLevel.create(item.x, item.y, 'element-' + item.t);
@@ -270,8 +270,6 @@ Ball.Game.prototype = {
 				//	this.ball.position.x = curserHolder.position.x;
 				//	this.ball.position.y = curserHolder.position.y;
 				//}
-				
-
 
 				//console.log("found no overlaps, current prevPos: " + this.game.prevPos)
 				//var latestGood = [this.ball.position.x, this.ball.position.y];
