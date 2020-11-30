@@ -2,7 +2,6 @@ Ball.Result = function(game) {};
 Ball.Result.prototype = {
 	create: function() {
         var style = { ...Ball.fontHuge, fontWeight: "bold"};
-
         this.stage.backgroundColor = "#89f483";
         //this.add.sprite(0, 0, 'screen-bg-passed');
         this.passInfo = this.add.text(Ball._WIDTH*0.5, Ball._HEIGHT*1.0/3.0, 'Passed Test', style);

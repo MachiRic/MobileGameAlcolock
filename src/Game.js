@@ -5,34 +5,16 @@ Ball.Game.prototype = {
 		this.stage.backgroundColor = "#ffffff"; //background
 		//Create the look of the game and the physics
 		this.physics.startSystem(Phaser.Physics.ARCADE);	//Physics
-		//this.fontMessage = { font: "24px Arial", fill: "#e4beef", align: "center", stroke: "#320C3E", strokeThickness: 4 };
 		this.audioStatus = true;
 		this.timer = 0;
 		this.totalTimer = 0;
 		this.totalCollisions = 0;
-		//this.level = 1;
-		//this.maxLevels = 1;
 		this.movementForce = 10;
-		//this.ballStartPos = { x: Ball._WIDTH * 0.5, y: Ball._HEIGHT * 0.95 };
 		this.down = false;
 		this.prevCollision = false;
 
 		this.game.prevPos = [];
 
-		//this.timerText = this.game.add.text(15, 15, "Time: " + this.timer, this.fontBig);
-		//this.levelText = this.game.add.text(120, 10, "Level: " + this.level + " / " + this.maxLevels, this.fontSmall);
-		//Create buttons
-		/*
-		this.pauseButton = this.add.button(Ball._WIDTH-8, 8, 'button-pause', this.managePause, this);
-		this.pauseButton.anchor.set(1,0);
-		this.pauseButton.input.useHandCursor = true;
-		this.audioButton = this.add.button(Ball._WIDTH-this.pauseButton.width-8*2, 8, 'button-audio', this.manageAudio, this);
-		this.audioButton.anchor.set(1,0);
-		this.audioButton.input.useHandCursor = true;
-		this.audioButton.animations.add('true', [0], 10, true);
-		this.audioButton.animations.add('false', [1], 10, true);
-		this.audioButton.animations.play(this.audioStatus);
-		*/
 		/* Create maze
 		 * reference: https://www.emanueleferonato.com/2015/06/30/pure-javascript-perfect-tile-maze-generation-with-a-bit-of-magic-thanks-to-phaser/
 		 */
@@ -40,7 +22,8 @@ Ball.Game.prototype = {
 		var maze = []; //save states of all maze grids, 1 for wall/untouched, 0 for path/touched
 		var moves = []; //save the current movements when finding the path
 		var gridNum = { x: 21, y: 41 }; //determin the complexity of the maze (must be odd)
-		var girdSize = { x: Ball._WIDTH / gridNum.x, y: 0.9*Ball._HEIGHT / gridNum.y };
+		var gridSize = { x: Ball._WIDTH / gridNum.x, y: 0.9*Ball._HEIGHT / gridNum.y };
+		console.log(gridSize);
 		//initialization
 		for (var j = 0; j < gridNum.y; j++) {
 			maze[j] = [];
@@ -50,7 +33,7 @@ Ball.Game.prototype = {
 		}
 		var posY = 1;
 		var posX = 1;
-		maze[posY][posX] = 0;
+		maze[posY][posX] = 0; //exit
 		moves.push(posX + posY * gridNum.x);
 		//finding path
 		while (moves.length) {
@@ -106,13 +89,14 @@ Ball.Game.prototype = {
 		//draw the maze using triangles
 		var mazeGridGraphics = this.game.add.graphics(); 
 		mazeGridGraphics.beginFill(0x000000);
-		mazeGridGraphics.drawRect(0, 0, girdSize.x, girdSize.y);
+		mazeGridGraphics.drawRect(0, 0, gridSize.x, gridSize.y);
 		mazeGridGraphics.endFill();
 		mazeGridGraphics.visible = false;
 		for (j = 0; j < gridNum.y; j++) {
 			for (i = 0; i < gridNum.x; i++) {
 				if (maze[j][i] == 1) {
-					var tempMazeGridSprite = this.game.add.sprite(i * girdSize.x, j * girdSize.y+0.1*Ball._HEIGHT
+					if (j == gridNum.y-2 && i == gridNum.x-2) continue; //avoid wall at the start position
+					var tempMazeGridSprite = this.game.add.sprite(i * gridSize.x, j * gridSize.y+0.1*Ball._HEIGHT
 						, mazeGridGraphics.generateTexture());
 					this.mazeGroup.add(tempMazeGridSprite);
 				}
@@ -123,15 +107,15 @@ Ball.Game.prototype = {
 		//Create the goal of the game, the hole
 		var holeGraphics = this.game.add.graphics(); 
 		holeGraphics.beginFill(0x89f483);
-		holeGraphics.drawRect(0, 0, girdSize.x, girdSize.y);
+		holeGraphics.drawRect(0, 0, gridSize.x, gridSize.y);
 		holeGraphics.endFill();
 		holeGraphics.visible = false;
-		this.hole = this.add.sprite(girdSize.x, girdSize.y+0.1*Ball._HEIGHT, holeGraphics.generateTexture());
+		this.hole = this.add.sprite(gridSize.x, gridSize.y+0.1*Ball._HEIGHT, holeGraphics.generateTexture());
 		//this.physics.enable(this.hole, Phaser.Physics.ARCADE);
 		//this.hole.body.setSize(2, 2);
 
 		//Create the ball and add physics
-		this.ball = this.add.sprite((gridNum.x-1.5)*girdSize.x, (gridNum.y-1.5)*girdSize.y+0.1*Ball._HEIGHT, 'ball');
+		this.ball = this.add.sprite((gridNum.x-1.5)*gridSize.x, (gridNum.y-1.5)*gridSize.y+0.1*Ball._HEIGHT, 'ball');
 		this.ball.anchor.set(0.5);
 		this.ball.scale.setTo(Ball.scaleFactor);
 		this.physics.enable(this.ball, Phaser.Physics.ARCADE);
@@ -151,10 +135,6 @@ Ball.Game.prototype = {
 		//  Allow dragging - the 'true' parameter will make the sprite snap to the center
 		//this.ball.input.enableDrag(true);
 		//console.log(this.ball.events);
-
-		//Initialise levels
-		//this.initLevels();
-		//this.showLevel(1);
 
 		//Create player and input from device as orientation
 		Ball._player = this.ball;
@@ -192,69 +172,7 @@ Ball.Game.prototype = {
 		//this.ball.body.bounce.set(0.9);
 
 	},
-	initLevels: function () {
-		//This is where we create the levels!!!
-		this.levels = [];
-		this.levelData = [
-			[	//Level 1
-				{ x: 188, y: 352, t: 'h' },	//h stands for height, which I think means that the wall will be vertical
-				{ x: 92, y: 320, t: 'w' },	//w stands for width, which I think means that the wall will be horizontal
-				{ x: 0, y: 240, t: 'w' },
-				{ x: 128, y: 240, t: 'w' },
-				{ x: 256, y: 240, t: 'h' },
-				{ x: 180, y: 52, t: 'h' },
-				{ x: 52, y: 148, t: 'w' }
-			],
-			[	//Level 2
-				{ x: 72, y: 320, t: 'w' },
-				{ x: 200, y: 320, t: 'h' },
-				{ x: 72, y: 150, t: 'w' }
-			],
-			[	//Level 3
-				{ x: 64, y: 352, t: 'h' },
-				{ x: 224, y: 352, t: 'h' },
-				{ x: 0, y: 240, t: 'w' },
-				{ x: 128, y: 240, t: 'w' },
-				{ x: 200, y: 52, t: 'h' }
-			],
-			[	//Level 4
-				{ x: 78, y: 352, t: 'h' },
-				{ x: 78, y: 320, t: 'w' },
-				{ x: 0, y: 240, t: 'w' },
-				{ x: 192, y: 240, t: 'w' },
-				{ x: 30, y: 150, t: 'w' },
-				{ x: 158, y: 150, t: 'w' }
-			],
-			[	//Level 5
-				{ x: 188, y: 352, t: 'h' },
-				{ x: 92, y: 320, t: 'w' },
-				{ x: 0, y: 240, t: 'w' },
-				{ x: 128, y: 240, t: 'w' },
-				{ x: 256, y: 240, t: 'h' },
-				{ x: 180, y: 52, t: 'h' },
-				{ x: 52, y: 148, t: 'w' }
-			]
-		];
-		for (var i = 0; i < this.maxLevels; i++) {
-			var newLevel = this.add.group();
-			newLevel.enableBody = true;
-			newLevel.physicsBodyType = Phaser.Physics.ARCADE;
-			for (var e = 0; e < this.levelData[i].length; e++) {
-				var item = this.levelData[i][e];
-				newLevel.create(item.x, item.y, 'element-' + item.t);
-			}
-			newLevel.setAll('body.immovable', true);
-			newLevel.visible = false;
-			this.levels.push(newLevel);
-		}
-	},
-	showLevel: function (level) {
-		var lvl = level | this.level;
-		if (this.levels[lvl - 2]) {
-			this.levels[lvl - 2].visible = false;
-		}
-		this.levels[lvl - 1].visible = true;
-	},
+
 	updateCounter: function () {
 		//Update the timer every second in the game
 		this.timer++;
@@ -307,13 +225,14 @@ Ball.Game.prototype = {
 		collision = false;
 
 		//In a for loop, check all walls in the game and see if the user is colliding or overlapping with the walls.
-		/*
-		for (i = 0; i < this.levels[this.level - 1].children.length; i++) {
-			if (this.checkOverlap(this.cursor, this.levels[this.level - 1].children[i])) {
+		for (i = 0; i < this.mazeGroup.children.length; i++) {
+			//this.physics.arcade.collide(this.ball, this.mazeGroup.children[i], this.wallCollision, null, this);
+			if (this.checkOverlap(this.ball, this.mazeGroup.children[i])) {
 				//If they overlap with at least one wall we set the collision to true.
-				collision = true;
+				//collision = true;
+				console.log("collision");
 			}
-		}*/
+		}
 		//console.log("Collission check complete, current prevpos: " + this.game.prevPos)
 
 		//console.log("Collision check complete, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
@@ -330,7 +249,6 @@ Ball.Game.prototype = {
 			//this.ball.position.x = previous[0];
 			//this.ball.position.y = previous[1];
 			//}
-
 			//}
 		}
 		else {
@@ -374,9 +292,6 @@ Ball.Game.prototype = {
 				//console.log("NOT reassigned Ball position, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
 
 			}
-
-
-
 			// console.log("reassigned prevPos, current value: " + this.ball.prevPos)
 			//}
 		}
@@ -389,12 +304,14 @@ Ball.Game.prototype = {
 	checkOverlap: function (spriteA, spriteB) {
 		//Check if two sprites overlap, or "collide"
 		var boundsA = spriteA.getBounds();
+		//console.log(boundsA);
 		var boundsB = spriteB.getBounds();
+		//console.log(boundsB);
 		return Phaser.Rectangle.intersects(boundsA, boundsB);
 	},
 
 	wallCollision: function (collission) {
-		//console.log("wall collision");
+		console.log("wall collision");
 		//Here we see what happens when we hit a wall.
 		if (!this.prevCollision) {
 			this.totalCollisions++;
@@ -404,33 +321,5 @@ Ball.Game.prototype = {
 
 	finishLevel: function () {
 		this.game.state.start('Result');
-		/*
-		//This decide what happens when we finish the level. We should probably show a new screen instead of a popup window
-		if (this.level >= this.maxLevels) {
-			this.totalTimer += this.timer;
-			//alert('Congratulations, game completed!\nTotal time of play: ' + this.totalTimer + ' seconds!');
-			//this.game.state.start('MainMenu');
-			this.game.state.start('Result');
-		}
-		else {
-			//Change this to a new screen instead of popup!
-			alert('Congratulations, level ' + this.level + ' completed!');
-			this.totalTimer += this.timer;
-			this.timer = 0;
-			this.level++;
-			this.timerText.setText("Time: " + this.timer);
-			//this.totalTimeText.setText("Total time: "+this.totalTimer);
-			this.totalCollisionsText.setText("Total collisions: " + this.totalCollisions);
-			this.levelText.setText("Level: " + this.level + " / " + this.maxLevels);
-			this.ball.body.x = this.ballStartPos.x;
-			this.ball.body.y = this.ballStartPos.y;
-			this.ball.body.velocity.x = 0;
-			this.ball.body.velocity.y = 0;
-			this.showLevel();*
-		}*/
-	},
-	render: function () {
-		// this.game.debug.body(this.ball);
-		// this.game.debug.body(this.hole);
 	}
 };
