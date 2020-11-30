@@ -10,8 +10,8 @@ Ball.Game.prototype = {
 		this.timer = 0;
 		this.totalTimer = 0;
 		this.totalCollisions = 0;
-		this.level = 1;
-		this.maxLevels = 1;
+		//this.level = 1;
+		//this.maxLevels = 1;
 		this.movementForce = 10;
 		this.ballStartPos = { x: Ball._WIDTH * 0.5, y: Ball._HEIGHT * 0.95 };
 		this.down = false;
@@ -33,6 +33,84 @@ Ball.Game.prototype = {
 		this.audioButton.animations.add('false', [1], 10, true);
 		this.audioButton.animations.play(this.audioStatus);
 		*/
+		/* Create maze
+		 * reference: https://www.emanueleferonato.com/2015/06/30/pure-javascript-perfect-tile-maze-generation-with-a-bit-of-magic-thanks-to-phaser/
+		 */
+		var maze = []; //save states of all maze grids, 1 for wall/untouched, 0 for path/touched
+		var moves = []; //save the current movements when finding the path
+		var gridNum = { x: 21, y: 41 }; //determin the complexity of the maze (must be odd)
+		var girdSize = { x: Ball._WIDTH / gridNum.x, y: Ball._HEIGHT / gridNum.y };
+		this.mazeGraphics = this.game.add.graphics(); //graphics for maze walls
+		//initialization
+		for (var j = 0; j < gridNum.y; j++) {
+			maze[j] = [];
+			for (var i = 0; i < gridNum.x; i++) {
+				maze[j][i] = 1;
+			}
+		}
+		var posY = 1;
+		var posX = 1;
+		maze[posY][posX] = 0;
+		moves.push(posX + posY * gridNum.x);
+		//finding path
+		while (moves.length) {
+			var possibleDirections = "";
+			if (posY + 2 > 0 && posY + 2 < gridNum.y - 1 && maze[posY + 2][posX] == 1) {
+				possibleDirections += "S";
+			}
+			if (posY - 2 > 0 && posY - 2 < gridNum.y - 1 && maze[posY - 2][posX] == 1) {
+				possibleDirections += "N";
+			}
+			if (posX - 2 > 0 && posX - 2 < gridNum.x - 1 && maze[posY][posX - 2] == 1) {
+				possibleDirections += "W";
+			}
+			if (posX + 2 > 0 && posX + 2 < gridNum.x - 1 && maze[posY][posX + 2] == 1) {
+				possibleDirections += "E";
+			}
+			if (possibleDirections) {
+				var tempMove = this.game.rnd.between(0, possibleDirections.length - 1);
+				switch (possibleDirections[tempMove]) {
+					case "N":
+						maze[posY - 2][posX] = 0;
+						maze[posY - 1][posX] = 0;
+						posY -= 2;
+						break;
+					case "S":
+						maze[posY + 2][posX] = 0;
+						maze[posY + 1][posX] = 0;
+						posY += 2;
+						break;
+					case "W":
+						maze[posY][posX - 2] = 0;
+						maze[posY][posX - 1] = 0;
+						posX -= 2;
+						break;
+					case "E":
+						maze[posY][posX + 2] = 0;
+						maze[posY][posX + 1] = 0;
+						posX += 2;
+						break;
+				}
+				moves.push(posX + posY * gridNum.x);
+			}
+			else {
+				var back = moves.pop();
+				posY = Math.floor(back / gridNum.x);
+                posX = back % gridNum.x;
+			}
+		}
+		//draw the maze using triangles
+		//this.mazeGraphics.clear();
+		this.mazeGraphics.beginFill(0x000000);
+		for (j = 0; j < gridNum.y; j++) {
+			for (i = 0; i < gridNum.x; i++) {
+				if (maze[j][i] == 1) {
+					this.mazeGraphics.drawRect(i * girdSize.x, j * girdSize.y, 
+						girdSize.x, girdSize.y);
+				}
+			}
+		}
+		this.mazeGraphics.endFill();
 
 		//Create the goal of the game, the hole
 		this.hole = this.add.sprite(Ball._WIDTH * 0.5, Ball._HEIGHT * 0.15, 'hole');
@@ -52,13 +130,9 @@ Ball.Game.prototype = {
 		this.cursor = this.add.sprite(0, 0, 'ball');
 		this.cursor.alpha = 0;
 
-
-
 		//var latestGood = this.ball.position;
 		//Input from keyboard
 		this.keys = this.game.input.keyboard.createCursorKeys();
-
-
 
 		//  Input Enable the sprites
 		this.ball.inputEnabled = true;
@@ -68,8 +142,8 @@ Ball.Game.prototype = {
 		//console.log(this.ball.events);
 
 		//Initialise levels
-		this.initLevels();
-		this.showLevel(1);
+		//this.initLevels();
+		//this.showLevel(1);
 
 		//Create player and input from device as orientation
 		Ball._player = this.ball;
@@ -94,7 +168,7 @@ Ball.Game.prototype = {
 		this.timerText = this.game.add.text(0.05 * Ball._WIDTH, Ball._HEIGHT * 0.05, "Time: " + this.timer, { ...Ball.fontBig, ...Ball.white });
 		this.timerText.anchor.setTo(0, 0.5);
 		this.timerText.scale.setTo(Ball.scaleFactor);
-		this.totalCollisionsText = this.game.add.text(0.4*Ball._WIDTH, Ball._HEIGHT * 0.05, "Collisions: " + this.totalCollisions, {...Ball.fontBig, ...Ball.white});
+		this.totalCollisionsText = this.game.add.text(0.4 * Ball._WIDTH, Ball._HEIGHT * 0.05, "Collisions: " + this.totalCollisions, { ...Ball.fontBig, ...Ball.white });
 		this.totalCollisionsText.anchor.setTo(0, 0.5);
 		this.totalCollisionsText.scale.setTo(Ball.scaleFactor);
 
@@ -189,7 +263,7 @@ Ball.Game.prototype = {
 		if (this.checkOverlap(this.ball, this.hole)) { this.finishLevel() }
 
 		//console.log(this.game.input);
-		console.log("Touch events: ", this.game.input.touch.events)
+		//console.log("Touch events: ", this.game.input.touch.events)
 		var inputPos = [this.game.input.activePointer.position.x, this.game.input.activePointer.position.y];
 
 		//Check if the user is pressing the mouse or touch down
@@ -222,12 +296,13 @@ Ball.Game.prototype = {
 		collision = false;
 
 		//In a for loop, check all walls in the game and see if the user is colliding or overlapping with the walls.
+		/*
 		for (i = 0; i < this.levels[this.level - 1].children.length; i++) {
 			if (this.checkOverlap(this.cursor, this.levels[this.level - 1].children[i])) {
 				//If they overlap with at least one wall we set the collision to true.
 				collision = true;
 			}
-		}
+		}*/
 		//console.log("Collission check complete, current prevpos: " + this.game.prevPos)
 
 		//console.log("Collision check complete, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
@@ -259,10 +334,10 @@ Ball.Game.prototype = {
 			//console.log("Overlapping ball: ", Phaser.Rectangle.intersects(boundsA, boundsB), ", Bounds ball: ", boundsA, ", Bounds cursor: ", boundsB, ", Cursor position: ", this.cursor.position);
 			if (this.checkOverlap(this.ball, curserHolder)) {
 				//if (this.game.input.touch.touchStartCallback){
-					//if (boundsB.x == this.cursor.position.x && boundsB.y == this.cursor.position.y) {
-						//console.log("pos in bounds is the same")
-						this.ball.position.x = curserHolder.position.x;
-						this.ball.position.y = curserHolder.position.y;
+				//if (boundsB.x == this.cursor.position.x && boundsB.y == this.cursor.position.y) {
+				//console.log("pos in bounds is the same")
+				this.ball.position.x = curserHolder.position.x;
+				this.ball.position.y = curserHolder.position.y;
 				//	}
 				//	console.log("Pos in bounds not the same");
 				//}
@@ -270,7 +345,7 @@ Ball.Game.prototype = {
 				//	this.ball.position.x = curserHolder.position.x;
 				//	this.ball.position.y = curserHolder.position.y;
 				//}
-				
+
 
 
 				//console.log("found no overlaps, current prevPos: " + this.game.prevPos)
@@ -317,7 +392,8 @@ Ball.Game.prototype = {
 	},
 
 	finishLevel: function () {
-
+		this.game.state.start('Result');
+		/*
 		//This decide what happens when we finish the level. We should probably show a new screen instead of a popup window
 		if (this.level >= this.maxLevels) {
 			this.totalTimer += this.timer;
@@ -339,8 +415,8 @@ Ball.Game.prototype = {
 			this.ball.body.y = this.ballStartPos.y;
 			this.ball.body.velocity.x = 0;
 			this.ball.body.velocity.y = 0;
-			this.showLevel();
-		}
+			this.showLevel();*
+		}*/
 	},
 	render: function () {
 		// this.game.debug.body(this.ball);
