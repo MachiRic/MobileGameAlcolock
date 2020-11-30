@@ -13,7 +13,7 @@ Ball.Game.prototype = {
 		//this.level = 1;
 		//this.maxLevels = 1;
 		this.movementForce = 10;
-		this.ballStartPos = { x: Ball._WIDTH * 0.5, y: Ball._HEIGHT * 0.95 };
+		//this.ballStartPos = { x: Ball._WIDTH * 0.5, y: Ball._HEIGHT * 0.95 };
 		this.down = false;
 		this.prevCollision = false;
 
@@ -36,11 +36,11 @@ Ball.Game.prototype = {
 		/* Create maze
 		 * reference: https://www.emanueleferonato.com/2015/06/30/pure-javascript-perfect-tile-maze-generation-with-a-bit-of-magic-thanks-to-phaser/
 		 */
+		//generate graphics
 		var maze = []; //save states of all maze grids, 1 for wall/untouched, 0 for path/touched
 		var moves = []; //save the current movements when finding the path
 		var gridNum = { x: 21, y: 41 }; //determin the complexity of the maze (must be odd)
-		var girdSize = { x: Ball._WIDTH / gridNum.x, y: Ball._HEIGHT / gridNum.y };
-		this.mazeGraphics = this.game.add.graphics(); //graphics for maze walls
+		var girdSize = { x: Ball._WIDTH / gridNum.x, y: 0.9*Ball._HEIGHT / gridNum.y };
 		//initialization
 		for (var j = 0; j < gridNum.y; j++) {
 			maze[j] = [];
@@ -99,28 +99,39 @@ Ball.Game.prototype = {
                 posX = back % gridNum.x;
 			}
 		}
+		//maze physics
+		this.mazeGroup = this.add.group();
+		this.mazeGroup.enableBody = true;
+		this.mazeGroup.physicsBodyType = Phaser.Physics.ARCADE;
 		//draw the maze using triangles
-		//this.mazeGraphics.clear();
-		this.mazeGraphics.beginFill(0x000000);
+		var mazeGridGraphics = this.game.add.graphics(); 
+		mazeGridGraphics.beginFill(0x000000);
+		mazeGridGraphics.drawRect(0, 0, girdSize.x, girdSize.y);
+		mazeGridGraphics.endFill();
+		mazeGridGraphics.visible = false;
 		for (j = 0; j < gridNum.y; j++) {
 			for (i = 0; i < gridNum.x; i++) {
 				if (maze[j][i] == 1) {
-					this.mazeGraphics.drawRect(i * girdSize.x, j * girdSize.y, 
-						girdSize.x, girdSize.y);
+					var tempMazeGridSprite = this.game.add.sprite(i * girdSize.x, j * girdSize.y+0.1*Ball._HEIGHT
+						, mazeGridGraphics.generateTexture());
+					this.mazeGroup.add(tempMazeGridSprite);
 				}
 			}
 		}
-		this.mazeGraphics.endFill();
+		this.mazeGroup.setAll('body.immovable', true);
 
 		//Create the goal of the game, the hole
-		this.hole = this.add.sprite(Ball._WIDTH * 0.5, Ball._HEIGHT * 0.15, 'hole');
+		var holeGraphics = this.game.add.graphics(); 
+		holeGraphics.beginFill(0x89f483);
+		holeGraphics.drawRect(0, 0, girdSize.x, girdSize.y);
+		holeGraphics.endFill();
+		holeGraphics.visible = false;
+		this.hole = this.add.sprite(girdSize.x, girdSize.y+0.1*Ball._HEIGHT, holeGraphics.generateTexture());
 		//this.physics.enable(this.hole, Phaser.Physics.ARCADE);
-		this.hole.anchor.set(0.5);
-		this.hole.scale.setTo(Ball.scaleFactor);
 		//this.hole.body.setSize(2, 2);
 
 		//Create the ball and add physics
-		this.ball = this.add.sprite(this.ballStartPos.x, this.ballStartPos.y, 'ball');
+		this.ball = this.add.sprite((gridNum.x-1.5)*girdSize.x, (gridNum.y-1.5)*girdSize.y+0.1*Ball._HEIGHT, 'ball');
 		this.ball.anchor.set(0.5);
 		this.ball.scale.setTo(Ball.scaleFactor);
 		this.physics.enable(this.ball, Phaser.Physics.ARCADE);
