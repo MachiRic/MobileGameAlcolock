@@ -231,11 +231,11 @@ Ball.Game.prototype = {
 		else {
 			//--------------* Touch Input *-------------------------------------------------------------------
 
-			if (this.checkOverlap(this.cursor, this.ball)) {
+			//if (this.checkOverlap(this.cursor, this.ball)) {
 				//console.log("cursor overlaps ball")
-				this.cursor.position.x = inputPos[0];
-				this.cursor.position.y = inputPos[1];
-			}
+				this.cursor.position.x = this.game.input.activePointer.position.x;
+				this.cursor.position.y = this.game.input.activePointer.position.y;
+			//}
 
 			//In a for loop, check all walls in the game and see if the user is colliding or overlapping with the walls.
 			for (i = 0; i < this.mazeGroup.children.length; i++) {
