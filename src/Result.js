@@ -2,9 +2,19 @@ Ball.Result = function(game) {};
 Ball.Result.prototype = {
 	create: function() {
         var style = { ...Ball.fontHuge, fontWeight: "bold"};
-        this.stage.backgroundColor = "#89f483";
-        //this.add.sprite(0, 0, 'screen-bg-passed');
-        this.passInfo = this.add.text(Ball._WIDTH*0.5, Ball._HEIGHT*1.0/3.0, 'Passed Test', style);
+        var time = this.game.state.states['Game'].timer;
+        var collisions = this.game.state.states['Game'].totalCollisions;
+
+        if (time > 5 || collisions > 30){
+            //fail page
+            this.stage.backgroundColor = "#f55a52";
+            this.passInfo = this.add.text(Ball._WIDTH*0.5, Ball._HEIGHT*1.0/3.0, 'Failed Test', style);
+        }
+        else{
+            //success page
+            this.stage.backgroundColor = "#89f483";
+            this.passInfo = this.add.text(Ball._WIDTH*0.5, Ball._HEIGHT*1.0/3.0, 'Passed Test', style);
+        }
         this.passInfo.anchor.setTo(0.5);
         this.passInfo.scale.setTo(Ball.scaleFactor);
         
