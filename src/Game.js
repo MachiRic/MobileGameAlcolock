@@ -22,7 +22,7 @@ Ball.Game.prototype = {
 		//generate graphics
 		var maze = []; //save states of all maze grids, 1 for wall/untouched, 0 for path/touched
 		var moves = []; //save the current movements when finding the path
-		var gridNum = { x: 11, y: 11 }; //determin the complexity of the maze (must be odd)
+		var gridNum = { x: 11, y: 11 }; //determin the complexity of the maze (must be odd number)
 		var gridSize = { x: Ball._WIDTH / gridNum.x, y: 0.9 * Ball._HEIGHT / gridNum.y };
 		console.log(gridSize);
 		//initialization
@@ -112,6 +112,9 @@ Ball.Game.prototype = {
 		holeGraphics.endFill();
 		holeGraphics.visible = false;
 		this.hole = this.add.sprite(gridSize.x, gridSize.y + 0.1 * Ball._HEIGHT, holeGraphics.generateTexture());
+		this.exitText = this.game.add.text(gridSize.x*1.5, gridSize.y*1.5 + 0.1 * Ball._HEIGHT, "E", {...Ball.fontBig});
+		this.exitText.scale.setTo(gridSize.x / 68.0); //68.0 is a factor to keep suitable size of E
+		this.exitText.anchor.setTo(0.5);
 		//this.physics.enable(this.hole, Phaser.Physics.ARCADE);
 		//this.hole.body.setSize(2, 2);
 
