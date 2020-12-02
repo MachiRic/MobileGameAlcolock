@@ -22,7 +22,7 @@ Ball.Game.prototype = {
 		//generate graphics
 		var maze = []; //save states of all maze grids, 1 for wall/untouched, 0 for path/touched
 		var moves = []; //save the current movements when finding the path
-		var gridNum = { x: 11, y: 11 }; //determin the complexity of the maze (must be odd number)
+		var gridNum = { x: 15, y: 25 }; //determin the complexity of the maze (must be odd number)
 		var gridSize = { x: Ball._WIDTH / gridNum.x, y: 0.9 * Ball._HEIGHT / gridNum.y };
 		console.log(gridSize);
 		//initialization
@@ -86,7 +86,7 @@ Ball.Game.prototype = {
 		//maze physics
 		this.mazeGroup = this.add.group();
 		this.mazeGroup.enableBody = true;
-		this.mazeGroup.physicsBodyType = Phaser.Physics.ARCADE;
+		//this.mazeGroup.physicsBodyType = Phaser.Physics.ARCADE;
 		//draw the maze using triangles
 		var mazeGridGraphics = this.game.add.graphics();
 		mazeGridGraphics.beginFill(0x000000);
@@ -103,7 +103,7 @@ Ball.Game.prototype = {
 				}
 			}
 		}
-		this.mazeGroup.setAll('body.immovable', true);
+		//this.mazeGroup.setAll('body.immovable', true);
 
 		//Create the goal of the game, the hole
 		var holeGraphics = this.game.add.graphics();
@@ -119,16 +119,19 @@ Ball.Game.prototype = {
 		//this.physics.enable(this.hole, Phaser.Physics.ARCADE);
 		//this.hole.body.setSize(2, 2);
 
+		var ballScaleFactor = 0.7 * ((gridSize.x < gridSize.y) ? gridSize.x : gridSize.y);
 		//Create the ball and add physics
 		this.ball = this.add.sprite((gridNum.x - 1.5) * gridSize.x, (gridNum.y - 1.5) * gridSize.y + 0.1 * Ball._HEIGHT, 'ball');
 		this.ball.anchor.set(0.5);
-		this.ball.scale.setTo(Ball.scaleFactor);
+		this.ball.scale.setTo(ballScaleFactor/this.ball.height);
 		//this.physics.enable(this.ball, Phaser.Physics.ARCADE);
 		//this.ball.body.setSize(this.ball.width, this.ball.height);
 		//this.ball.body.bounce.set(0.3, 0.3);
 
 		this.cursor = this.add.sprite(0, 0, 'ball');
+		this.cursor.anchor.setTo(0.5);
 		this.cursor.alpha = 0;
+		this.cursor.scale.setTo(ballScaleFactor/this.cursor.height*0.9);
 
 		//var latestGood = this.ball.position;
 		//Input from keyboard
@@ -158,7 +161,7 @@ Ball.Game.prototype = {
 		this.panel.beginFill(0x000000, 0.8);
 		this.panel.drawRect(0, 0, Ball._WIDTH, Ball._HEIGHT * 0.1);
 		this.borderGroup.add(this.panel);
-		this.borderGroup.setAll('body.immovable', true);
+		//this.borderGroup.setAll('body.immovable', true);
 		//this.bounceSound = this.game.add.audio('audio-bounce');
 
 		this.timerText = this.game.add.text(0.05 * Ball._WIDTH, Ball._HEIGHT * 0.05, "Time: " + this.timer, { ...Ball.fontBig, ...Ball.white });
