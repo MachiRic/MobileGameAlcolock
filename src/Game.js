@@ -6,7 +6,6 @@ Ball.Game.prototype = {
 		this.stage.backgroundColor = "#ffffff"; //background
 		//Create the look of the game and the physics
 		//this.physics.startSystem(Phaser.Physics.ARCADE);	//Physics
-		this.audioStatus = true;
 		this.timer = 0;
 		this.totalTimer = 0;
 		this.totalCollisions = 0;
@@ -290,12 +289,15 @@ Ball.Game.prototype = {
 		return Phaser.Rectangle.intersects(boundsA, boundsB);
 	},
 
-	wallCollision: function (collission) {
+	wallCollision: function (collision) {
 		console.log("wall collision");
 		//Here we see what happens when we hit a wall.
 		if (!this.prevCollision) {
 			this.totalCollisions++;
 			this.totalCollisionsText.setText("Collisions: " + this.totalCollisions);
+		}
+		if("vibrate" in window.navigator) {
+			window.navigator.vibrate(100);
 		}
 	},
 
