@@ -9,6 +9,10 @@ Ball.MainMenu.prototype = {
 		this.bar.beginFill(0x000000, 0.8);
 		this.bar.drawRect(Ball._WIDTH * 0.05, Ball._HEIGHT * 0.05, Ball._WIDTH * 0.9, Ball._HEIGHT * 0.9);
 		this.bar.endFill();
+		//border
+		this.border = this.game.add.graphics();
+		this.border.lineStyle(8, 0x000000, 0.8);
+		this.border.drawRect(0, 0, Ball._WIDTH, Ball._HEIGHT);
 		//title
 		this.title = this.add.text(Ball._WIDTH * 0.1, Ball._HEIGHT * 1.0 / 3.0, 'Maze', { font: "200px 3Dpixel", ...Ball.white });
 		this.title.anchor.setTo(0, 1);
@@ -41,8 +45,8 @@ Ball.MainMenu.prototype = {
 	},
 
 	startGame: function () {
-		//this.game.state.start('Howto');
-		this.game.state.start('Game');
+		this.game.state.start('Howto');
+		//this.game.state.start('Game');
 	},
 
 	onOver: function() {

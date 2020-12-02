@@ -7,12 +7,6 @@ var Ball = {
 };
 Ball.Boot = function(game) {};
 Ball.Boot.prototype = {
-    preload: function() {
-        //Change and add the correct loading bar. Create png.
-        this.load.image('preloaderBg', 'img/loading-bg.png');
-        this.load.image('preloaderBar', 'img/loading-bar.png');
-        
-    },
     create: function() {
         //HACK TO PRELOAD A CUSTOM FONT
 		this.game.add.text(0, 0, "hack", {font:"1px joystix", fill:"rgba(0,0,0,0)"});
