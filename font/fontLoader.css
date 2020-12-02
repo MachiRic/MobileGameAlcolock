@@ -1,0 +1,13 @@
+@font-face {
+	font-family: "joystix";
+	font-style: normal;
+	font-weight: 400;
+	src: url("joystix_monospace.ttf")format('truetype');
+}
+
+@font-face {
+	font-family: "3Dpixel";
+	font-style: normal;
+	font-weight: 400;
+	src: url("3D-Thirteen-Pixel-Fonts.ttf")format('truetype');
+}

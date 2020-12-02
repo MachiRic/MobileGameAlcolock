@@ -1,4 +1,4 @@
-Ball.Howto = function(game) {
+Ball.Howto = function (game) {
 };
 Ball.Howto.prototype = {
     create: function() {

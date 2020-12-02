@@ -2,12 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <link rel="stylesheet" type = "text/css" href = "font/fontLoader.css">
     <title>MobileGameAlcolock demo</title>
     <style> body { margin: 0; background: rgb(255, 255, 255); } </style>
     <!--Import the phaser framework-->
-    <!--<script src="//cdn.jsdelivr.net/npm/phaser@2.2.2/dist/phaser.min.js"></script>-->
-
-    <script src="//cdn.jsdelivr.net/phaser/2.6.2/phaser.js"></script>
+    <!--<script src="//cdn.jsdelivr.net/phaser/2.6.2/phaser.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/phaser-ce@2.16.1/build/phaser.js"></script>
    
     <!--Import the other files the game consists of-->
     <script src="./src/Boot.js"></script>
@@ -15,17 +15,30 @@
     <script src="./src/MainMenu.js"></script>
     <script src="./src/Howto.js"></script>
     <script src="./src/Game.js"></script>
+    <script src="./src/Result.js"></script>
 </head>
 
 <body>
 <script>
 (function() {
-    var game = new Phaser.Game(320, 480, Phaser.AUTO, 'game');
+    //responsive
+    var resWidth = window.innerWidth * window.devicePixelRatio;
+    var resHeight = window.innerHeight * window.devicePixelRatio;
+    //var resWidth = 375 * 2;
+    //var resHeight = 667 * 2;
+    console.log(window.innerWidth);
+    console.log(window.devicePixelRatio);
+    console.log(resWidth);
+    var game = new Phaser.Game(resWidth, resHeight, Phaser.AUTO, 'game');
+    Ball._WIDTH = resWidth;
+    Ball._HEIGHT = resHeight;
+    Ball.scaleFactor = resWidth / 750.0;
     game.state.add('Boot', Ball.Boot);
     game.state.add('Preloader', Ball.Preloader);
     game.state.add('MainMenu', Ball.MainMenu);
     game.state.add('Howto', Ball.Howto);
     game.state.add('Game', Ball.Game);
+    game.state.add('Result', Ball.Result);
     game.state.start('Boot');
 })();
 </script>
