@@ -3,6 +3,11 @@ Ball.Preloader.prototype = {
 	preload: function() {
 		//Preloads all the objects before they are shown. Important to load all images here! Otherwise we will have errors!!
 		this.stage.backgroundColor = "#ffffff";
+		//border
+		this.border = this.game.add.graphics();
+		this.border.lineStyle(8, 0x000000, 0.8);
+		this.border.drawRect(0, 0, Ball._WIDTH, Ball._HEIGHT);
+		//loading bar graphics
 		var loadingBarBG = this.game.add.graphics();
 		loadingBarBG.lineStyle(4, 0x000000, 1);
 		loadingBarBG.drawRect(0, 0, Ball._WIDTH * 0.3, Ball._HEIGHT * 0.015);

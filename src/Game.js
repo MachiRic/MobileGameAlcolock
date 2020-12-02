@@ -113,7 +113,8 @@ Ball.Game.prototype = {
 		holeGraphics.visible = false;
 		this.hole = this.add.sprite(gridSize.x, gridSize.y + 0.1 * Ball._HEIGHT, holeGraphics.generateTexture());
 		this.exitText = this.game.add.text(gridSize.x*1.5, gridSize.y*1.5 + 0.1 * Ball._HEIGHT, "E", {...Ball.fontBig});
-		this.exitText.scale.setTo(gridSize.x / 68.0); //68.0 is a factor to keep suitable size of E
+		var exitScale = (gridSize.x/68.0 < gridSize.y/57.0) ? gridSize.x/68.0 : gridSize.y/57.0;
+		this.exitText.scale.setTo(exitScale); //68.0 and 57.0 are factors to keep suitable size of E
 		this.exitText.anchor.setTo(0.5);
 		//this.physics.enable(this.hole, Phaser.Physics.ARCADE);
 		//this.hole.body.setSize(2, 2);
