@@ -27,7 +27,10 @@ Ball.Preloader.prototype = {
 		this.load.image('ball', this.imageFolder+'/ball.png');
 		this.load.image('screen-mainmenu', this.imageFolder+'/screen-mainmenu.png');
 
-		//this.load.audio('audio-bounce', ['audio/bounce.ogg', 'audio/bounce.mp3', 'audio/bounce.m4a']);
+		//audio source: https://freesound.org/people/JustInvoke/sounds/446100/
+		//this.load.audio('audio-bounce', ['audio/collide.ogg', 'audio/collide.mp3']);
+		//audio source: https://freesound.org/people/tack00/sounds/401592/
+		this.load.audio('audio-vibration', ['audio/vibration.ogg', 'audio/vibration.mp3']);
 	},
 	create: function() {
 		this.game.state.start('MainMenu');

@@ -30,7 +30,7 @@
     console.log(window.innerWidth);
     console.log(window.devicePixelRatio);
     console.log(resWidth);
-    var game = new Phaser.Game(resWidth, resHeight, Phaser.CANVAS, 'game');
+    var game = new Phaser.Game(resWidth, resHeight, Phaser.AUTO, 'game');
     Ball._WIDTH = resWidth;
     Ball._HEIGHT = resHeight;
     Ball.scaleFactor = resWidth / 750.0;

@@ -7,7 +7,10 @@ var Ball = {
 };
 Ball.Boot = function(game) {};
 Ball.Boot.prototype = {
+    preload: function() { 
+    },
     create: function() {
+        //this.stage.backgroundColor = "#ffffff";
         //HACK TO PRELOAD A CUSTOM FONT
 		this.game.add.text(0, 0, "hack", {font:"1px joystix", fill:"rgba(0,0,0,0)"});
         this.game.add.text(0, 0, "hack", {font:"1px 3Dpixel", fill:"rgba(0,0,0,0)"});
