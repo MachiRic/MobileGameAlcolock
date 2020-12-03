@@ -21,7 +21,7 @@ Ball.Game.prototype = {
 		//generate graphics
 		var maze = []; //save states of all maze grids, 1 for wall/untouched, 0 for path/touched
 		var moves = []; //save the current movements when finding the path
-		var gridNum = { x: 15, y: 25 }; //determin the complexity of the maze (must be odd number)
+		var gridNum = { x: 11, y: 19 }; //determin the complexity of the maze (must be odd number)
 		var gridSize = { x: Ball._WIDTH / gridNum.x, y: 0.9 * Ball._HEIGHT / gridNum.y };
 		console.log(gridSize);
 		//initialization
