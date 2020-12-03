@@ -132,10 +132,10 @@ Ball.Game.prototype = {
 		this.cursor.alpha = 0;
 		this.cursor.scale.setTo(ballScaleFactor / this.cursor.height * 0.9);
 
-		//this.cursor.alpha = 0;
-		//this.cursor.width = 24;
-		//this.cursor.height = 24;
-		//this.ball.scale.setTo(Ball.scaleFactor);
+		// this.cursor.alpha = 0;
+		// this.cursor.width = 24;
+		// this.cursor.height = 24;
+		// this.ball.scale.setTo(Ball.scaleFactor);
 
 		//var latestGood = this.ball.position;
 		//Input from keyboard
@@ -209,8 +209,8 @@ Ball.Game.prototype = {
 			//console.log("Cursor before: ", this.cursor._bounds);
 			this.cursor._bounds.x = e.x;
 			this.cursor._bounds.y = e.y;
-			//this.cursor._bounds.width = this.ball._width;
-			//this.cursor._bounds.height = this.ball._height;
+			this.cursor._bounds.width = this.cursor.width;
+			this.cursor._bounds.height = this.cursor.height;
 			var rect1 = this.ball._bounds;
 			var rect2 = this.cursor._bounds;
 			console.log("Cursor after: ", rect2, ", Ball after: ", rect1);
@@ -246,15 +246,15 @@ Ball.Game.prototype = {
 
 
 		//Check if the user is pressing the mouse or touch down
-		if (this.game.input.activePointer.isMouse) {
+		if (this.onBall) {
 
 			//--------------* Mouse Input *-------------------------------------------------------------------
 
 			//Check if the user is pressing the mouse down
-			if (this.onBall) {
+			//if (this.onBall) {
 				this.cursor.position.x = this.game.input.activePointer.position.x;
 				this.cursor.position.y = this.game.input.activePointer.position.y;
-			}
+			//}
 
 			//In a for loop, check all walls in the game and see if the user is colliding or overlapping with the walls.
 			for (i = 0; i < this.mazeGroup.children.length; i++) {
@@ -266,7 +266,7 @@ Ball.Game.prototype = {
 
 			if (collision) {
 				//console.log('Overlapping: true');
-				if (this.onBall && this.checkOverlap(this.ball, this.mazeGroup.children[i])) {
+				if (this.onBall) {
 					//If we have a collision with the ball we call the wallCollision function
 					this.wallCollision(collision);
 				}
@@ -293,7 +293,7 @@ Ball.Game.prototype = {
 			}
 
 		}
-		else {
+		/*else {
 			//--------------* Touch Input *-------------------------------------------------------------------
 
 			//if (this.checkOverlap(this.cursor, this.ball)) {
@@ -340,7 +340,7 @@ Ball.Game.prototype = {
 
 
 		}
-
+*/
 		//--------------* At end *-----------------------
 		this.prevCollision = collision;
 
