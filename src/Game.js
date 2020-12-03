@@ -132,10 +132,6 @@ Ball.Game.prototype = {
 		this.cursor.alpha = 0;
 		this.cursor.scale.setTo(ballScaleFactor / this.cursor.height * 0.9);
 
-		// this.cursor.alpha = 0;
-		// this.cursor.width = 24;
-		// this.cursor.height = 24;
-		// this.ball.scale.setTo(Ball.scaleFactor);
 
 		//var latestGood = this.ball.position;
 		//Input from keyboard
@@ -243,16 +239,11 @@ Ball.Game.prototype = {
 		collision = false;
 
 
-		//Check if the user is pressing the mouse or touch down
+		//Check if the user is dragging the ball
 		if (this.onBall) {
 
-			//--------------* Mouse Input *-------------------------------------------------------------------
-
-			//Check if the user is pressing the mouse down
-			//if (this.onBall) {
-				this.cursor.position.x = this.game.input.activePointer.position.x;
-				this.cursor.position.y = this.game.input.activePointer.position.y;
-			//}
+			this.cursor.position.x = this.game.input.activePointer.position.x;
+			this.cursor.position.y = this.game.input.activePointer.position.y;
 
 			//In a for loop, check all walls in the game and see if the user is colliding or overlapping with the walls.
 			for (i = 0; i < this.mazeGroup.children.length; i++) {
@@ -273,9 +264,9 @@ Ball.Game.prototype = {
 				if (this.prevCollision && !collision) {
 					//if go out of collision state, the position also needs to be updated
 					var maxdis2 = this.gridSize.x * this.gridSize.x + this.gridSize.y * this.gridSize.y;
-					var cursorBallDis2 = Math.pow(this.cursor.position.x - this.ball.position.x , 2) 
-						+ Math.pow(this.cursor.position.y - this.ball.position.y , 2);
-					if (cursorBallDis2 <= maxdis2){
+					var cursorBallDis2 = Math.pow(this.cursor.position.x - this.ball.position.x, 2)
+						+ Math.pow(this.cursor.position.y - this.ball.position.y, 2);
+					if (cursorBallDis2 <= maxdis2) {
 						this.ball.position.x = this.cursor.position.x;
 						this.ball.position.y = this.cursor.position.y;
 					}
@@ -291,59 +282,9 @@ Ball.Game.prototype = {
 			}
 
 		}
-		/*else {
-			//--------------* Touch Input *-------------------------------------------------------------------
-
-			//if (this.checkOverlap(this.cursor, this.ball)) {
-			//console.log("cursor overlaps ball")
-			this.cursor.position.x = this.game.input.activePointer.position.x;
-			this.cursor.position.y = this.game.input.activePointer.position.y;
-			//}
-
-			//In a for loop, check all walls in the game and see if the user is colliding or overlapping with the walls.
-			for (i = 0; i < this.mazeGroup.children.length; i++) {
-				if (this.checkOverlap(this.cursor, this.mazeGroup.children[i])) {
-					//If they overlap with at least one wall we set the collision to true.
-					collision = true;
-					//console.log("collision");
-				}
-			}
-			//console.log("Collission check complete, current prevpos: " + this.game.prevPos)
-
-			//console.log("Collision check complete, Curser position: ", this.cursor.position, ", Ball position: ", this.ball.position);
-
-			//If the user collided with any of the walls we set the position of the ball to the third latest position. I should probably make this better
-			if (collision) {
-				//console.log('Overlapping: true');
-				if (this.onBall) {
-					//If we have a collision with the ball we call the wallCollision function
-					this.wallCollision(collision);
-				}
-			}
-			else {
-				if (this.prevCollision && !collision) {
-					//if go out of collision state, the position also needs to be updated
-					this.ball.position.x = this.cursor.position.x;
-					this.ball.position.y = this.cursor.position.y;
-				}
-				else {
-					//If we don't find any overlaps we add the current position of the ball in the prevPos array
-					//console.log('Overlapping: false');
-					if (this.checkOverlap(this.cursor, this.ball)) {
-						this.ball.position.x = this.cursor.position.x;
-						this.ball.position.y = this.cursor.position.y;
-					}
-				}
-			}
-
-
-		}
-*/
+		
 		//--------------* At end *-----------------------
 		this.prevCollision = collision;
-
-		
-
 
 	},
 
