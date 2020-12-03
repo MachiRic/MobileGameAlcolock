@@ -25,7 +25,7 @@ Ball.Game.prototype = {
 		//generate graphics
 		var maze = []; //save states of all maze grids, 1 for wall/untouched, 0 for path/touched
 		var moves = []; //save the current movements when finding the path
-		var gridNum = { x: 11, y: 19 }; //determin the complexity of the maze (must be odd number)
+		var gridNum = { x: 9, y: 17 }; //determin the complexity of the maze (must be odd number)
 		var mergePixel = 1.0;
 		this.gridSize = { x: Ball._WIDTH / gridNum.x + mergePixel, y: 0.9 * Ball._HEIGHT / gridNum.y + mergePixel};
 		console.log(this.gridSize);
@@ -124,7 +124,7 @@ Ball.Game.prototype = {
 		//this.physics.enable(this.hole, Phaser.Physics.ARCADE);
 		//this.hole.body.setSize(2, 2);
 
-		var ballScaleFactor = 0.7 * ((this.gridSize.x < this.gridSize.y) ? this.gridSize.x : this.gridSize.y);
+		var ballScaleFactor = 0.65 * ((this.gridSize.x < this.gridSize.y) ? this.gridSize.x : this.gridSize.y);
 		//Create the ball and add physics
 		this.ball = this.add.sprite((gridNum.x - 1.5) * (this.gridSize.x-mergePixel), (gridNum.y - 1.5) * (this.gridSize.y-mergePixel) + 0.1 * Ball._HEIGHT, 'ball');
 		this.ball.anchor.set(0.5);
@@ -135,7 +135,7 @@ Ball.Game.prototype = {
 
 		this.cursor = this.add.sprite(0, 0, 'ball');
 		this.cursor.anchor.setTo(0.5);
-		this.cursor.alpha = 0;
+		this.cursor.alpha = 0.3;
 		this.cursor.scale.setTo(ballScaleFactor / this.cursor.height * 0.9);
 
 
