@@ -22,8 +22,8 @@ Ball.Game.prototype = {
 		var maze = []; //save states of all maze grids, 1 for wall/untouched, 0 for path/touched
 		var moves = []; //save the current movements when finding the path
 		var gridNum = { x: 11, y: 19 }; //determin the complexity of the maze (must be odd number)
-		var gridSize = { x: Ball._WIDTH / gridNum.x, y: 0.9 * Ball._HEIGHT / gridNum.y };
-		console.log(gridSize);
+		this.gridSize = { x: Ball._WIDTH / gridNum.x, y: 0.9 * Ball._HEIGHT / gridNum.y };
+		console.log(this.gridSize);
 		//initialization
 		for (var j = 0; j < gridNum.y; j++) {
 			maze[j] = [];
@@ -89,14 +89,14 @@ Ball.Game.prototype = {
 		//draw the maze using triangles
 		var mazeGridGraphics = this.game.add.graphics();
 		mazeGridGraphics.beginFill(0x000000);
-		mazeGridGraphics.drawRect(0, 0, gridSize.x, gridSize.y);
+		mazeGridGraphics.drawRect(0, 0, this.gridSize.x, this.gridSize.y);
 		mazeGridGraphics.endFill();
 		mazeGridGraphics.visible = false;
 		for (j = 0; j < gridNum.y; j++) {
 			for (i = 0; i < gridNum.x; i++) {
 				if (maze[j][i] == 1) {
 					if (j == gridNum.y - 2 && i == gridNum.x - 2) continue; //avoid wall at the start position
-					var tempMazeGridSprite = this.game.add.sprite(i * gridSize.x, j * gridSize.y + 0.1 * Ball._HEIGHT
+					var tempMazeGridSprite = this.game.add.sprite(i * this.gridSize.x, j * this.gridSize.y + 0.1 * Ball._HEIGHT
 						, mazeGridGraphics.generateTexture());
 					this.mazeGroup.add(tempMazeGridSprite);
 				}
@@ -107,20 +107,20 @@ Ball.Game.prototype = {
 		//Create the goal of the game, the hole
 		var holeGraphics = this.game.add.graphics();
 		holeGraphics.beginFill(0x89f483);
-		holeGraphics.drawRect(0, 0, gridSize.x, gridSize.y);
+		holeGraphics.drawRect(0, 0, this.gridSize.x, this.gridSize.y);
 		holeGraphics.endFill();
 		holeGraphics.visible = false;
-		this.hole = this.add.sprite(gridSize.x, gridSize.y + 0.1 * Ball._HEIGHT, holeGraphics.generateTexture());
-		this.exitText = this.game.add.text(gridSize.x * 1.5, gridSize.y * 1.5 + 0.1 * Ball._HEIGHT, "E", { ...Ball.fontBig });
-		var exitScale = (gridSize.x / 68.0 < gridSize.y / 57.0) ? gridSize.x / 68.0 : gridSize.y / 57.0;
+		this.hole = this.add.sprite(this.gridSize.x, this.gridSize.y + 0.1 * Ball._HEIGHT, holeGraphics.generateTexture());
+		this.exitText = this.game.add.text(this.gridSize.x * 1.5, this.gridSize.y * 1.5 + 0.1 * Ball._HEIGHT, "E", { ...Ball.fontBig });
+		var exitScale = (this.gridSize.x / 68.0 < this.gridSize.y / 57.0) ? this.gridSize.x / 68.0 : this.gridSize.y / 57.0;
 		this.exitText.scale.setTo(exitScale); //68.0 and 57.0 are factors to keep suitable size of E
 		this.exitText.anchor.setTo(0.5);
 		//this.physics.enable(this.hole, Phaser.Physics.ARCADE);
 		//this.hole.body.setSize(2, 2);
 
-		var ballScaleFactor = 0.7 * ((gridSize.x < gridSize.y) ? gridSize.x : gridSize.y);
+		var ballScaleFactor = 0.7 * ((this.gridSize.x < this.gridSize.y) ? this.gridSize.x : this.gridSize.y);
 		//Create the ball and add physics
-		this.ball = this.add.sprite((gridNum.x - 1.5) * gridSize.x, (gridNum.y - 1.5) * gridSize.y + 0.1 * Ball._HEIGHT, 'ball');
+		this.ball = this.add.sprite((gridNum.x - 1.5) * this.gridSize.x, (gridNum.y - 1.5) * this.gridSize.y + 0.1 * Ball._HEIGHT, 'ball');
 		this.ball.anchor.set(0.5);
 		this.ball.scale.setTo(ballScaleFactor / this.ball.height);
 		//this.physics.enable(this.ball, Phaser.Physics.ARCADE);
@@ -228,8 +228,13 @@ Ball.Game.prototype = {
 			else {
 				if (this.prevCollision && !collision) {
 					//if go out of collision state, the position also needs to be updated
-					this.ball.position.x = this.cursor.position.x;
-					this.ball.position.y = this.cursor.position.y;
+					var maxdis2 = this.gridSize.x * this.gridSize.x + this.gridSize.y * this.gridSize.y;
+					var cursorBallDis2 = Math.pow(this.cursor.position.x - this.ball.position.x , 2) 
+						+ Math.pow(this.cursor.position.y - this.ball.position.y , 2);
+					if (cursorBallDis2 <= maxdis2){
+						this.ball.position.x = this.cursor.position.x;
+						this.ball.position.y = this.cursor.position.y;
+					}
 				}
 				else {
 					//If we don't find any overlaps we add the current position of the ball in the prevPos array
@@ -310,9 +315,10 @@ Ball.Game.prototype = {
 			this.totalCollisions++;
 			this.totalCollisionsText.setText("Collisions: " + this.totalCollisions);
 		}
+		/*
 		if ("vibrate" in window.navigator) {
 			window.navigator.vibrate(100);
-		}
+		}*/
 	},
 
 	finishLevel: function () {
