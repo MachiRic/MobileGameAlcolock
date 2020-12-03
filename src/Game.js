@@ -13,8 +13,8 @@ Ball.Game.prototype = {
 		this.down = false;
 		this.prevCollision = false;
 
-		this.vibrationSound = this.game.add.audio('audio-vibration');
-		this.vibrationSound.volume = 0.5;
+		//this.vibrationSound = this.game.add.audio('audio-vibration');
+		//this.vibrationSound.volume = 0.5;
 		//this.bounceSound = this.game.add.audio('audio-bounce');
 
 		this.game.prevPos = [];
@@ -313,10 +313,10 @@ Ball.Game.prototype = {
 			this.totalCollisions++;
 			this.totalCollisionsText.setText("Collisions: " + this.totalCollisions);
 		}
-		
+		/*
 		if (!this.vibrationSound.isPlaying){
 			this.vibrationSound.play();
-		}
+		}*/
 		/*
 		if (!this.bounceSound.isPlaying){
 			this.bounceSound.play();
