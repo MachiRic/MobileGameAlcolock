@@ -213,7 +213,7 @@ Ball.Game.prototype = {
 			this.cursor._bounds.height = this.cursor.height;
 			var rect1 = this.ball._bounds;
 			var rect2 = this.cursor._bounds;
-			console.log("Cursor after: ", rect2, ", Ball after: ", rect1);
+			//console.log("Cursor after: ", rect2, ", Ball after: ", rect1);
 
 			this.onBall = Phaser.Rectangle.intersects(rect1, rect2);
 
@@ -235,8 +235,6 @@ Ball.Game.prototype = {
 
 	update: function () {
 
-
-		console.log("at the start of update: ", this.onBall);
 
 		//Check if the level is finished
 		if (this.checkOverlap(this.ball, this.hole)) { this.finishLevel() }
@@ -344,7 +342,7 @@ Ball.Game.prototype = {
 		//--------------* At end *-----------------------
 		this.prevCollision = collision;
 
-		console.log("at the end of update: ", this.onBall);
+		
 
 
 	},
