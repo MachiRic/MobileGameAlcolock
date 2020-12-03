@@ -312,19 +312,24 @@ Ball.Game.prototype = {
 		if (!this.prevCollision) {
 			this.totalCollisions++;
 			this.totalCollisionsText.setText("Collisions: " + this.totalCollisions);
+			if (window.navigator && window.navigator.vibrate) {
+				// Vibration supported
+				window.navigator.vibrate(100);
+			 } else {
+				// Vibration not supported
+				if (!this.vibrationSound.isPlaying){
+					this.vibrationSound.play();
+				}
+			 }
+			/*
+			if (!this.bounceSound.isPlaying){
+				this.bounceSound.play();
+			}*/
+			/*
+			if ("vibrate" in window.navigator) {
+				window.navigator.vibrate(100);
+			}*/
 		}
-		
-		if (!this.vibrationSound.isPlaying){
-			this.vibrationSound.play();
-		}
-		/*
-		if (!this.bounceSound.isPlaying){
-			this.bounceSound.play();
-		}*/
-		/*
-		if ("vibrate" in window.navigator) {
-			window.navigator.vibrate(100);
-		}*/
 	},
 
 	finishLevel: function () {
