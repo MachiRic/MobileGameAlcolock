@@ -1,7 +1,7 @@
 Ball.Game = function (game) { };
 Ball.Game.prototype = {
 	create: function () {
-		console.log("Version 0.2");
+		console.log("Version 0.3");
 		//game background
 		this.stage.backgroundColor = "#ffffff"; //background
 		//Create the look of the game and the physics
