@@ -132,6 +132,11 @@ Ball.Game.prototype = {
 		this.cursor.alpha = 0;
 		this.cursor.scale.setTo(ballScaleFactor / this.cursor.height * 0.9);
 
+		//this.cursor.alpha = 0;
+		//this.cursor.width = 24;
+		//this.cursor.height = 24;
+		//this.ball.scale.setTo(Ball.scaleFactor);
+
 		//var latestGood = this.ball.position;
 		//Input from keyboard
 		this.keys = this.game.input.keyboard.createCursorKeys();
@@ -177,6 +182,46 @@ Ball.Game.prototype = {
 
 		//this.ball.body.collideWorldBounds = true;
 		//this.ball.body.bounce.set(0.9);
+		this.onBall = false;
+
+
+		this.game.input.onUp.add((e) => {
+			console.log('UP');
+			this.onBall = false;
+			//console.log(this.onBall)
+		});
+
+
+		this.game.input.onTap.add(function () {
+			//console.log('TAP');
+			//console.log( this.onBall)
+		});
+
+
+		this.game.input.onDown.add((e) => {
+			console.log('DOWN');
+
+			//console.log("BALL: ", this.ball._bounds);
+			//console.log("Cursor: ", this.cursor);
+			this.cursor.position.x = e.x;
+			this.cursor.position.y = e.y;
+
+			//console.log("Cursor before: ", this.cursor._bounds);
+			this.cursor._bounds.x = e.x;
+			this.cursor._bounds.y = e.y;
+			//this.cursor._bounds.width = this.ball._width;
+			//this.cursor._bounds.height = this.ball._height;
+			var rect1 = this.ball._bounds;
+			var rect2 = this.cursor._bounds;
+			console.log("Cursor after: ", rect2, ", Ball after: ", rect1);
+
+			this.onBall = Phaser.Rectangle.intersects(rect1, rect2);
+
+			//console.log(this.onBall);
+
+		});
+
+
 
 
 
@@ -191,6 +236,8 @@ Ball.Game.prototype = {
 	update: function () {
 
 
+		console.log("at the start of update: ", this.onBall);
+
 		//Check if the level is finished
 		if (this.checkOverlap(this.ball, this.hole)) { this.finishLevel() }
 
@@ -204,7 +251,7 @@ Ball.Game.prototype = {
 			//--------------* Mouse Input *-------------------------------------------------------------------
 
 			//Check if the user is pressing the mouse down
-			if (this.game.input.activePointer.isDown) {
+			if (this.onBall) {
 				this.cursor.position.x = this.game.input.activePointer.position.x;
 				this.cursor.position.y = this.game.input.activePointer.position.y;
 			}
@@ -217,10 +264,9 @@ Ball.Game.prototype = {
 				}
 			}
 
-			//If the user collided with any of the walls we set the position of the ball to the third latest position. I should probably make this better
 			if (collision) {
 				//console.log('Overlapping: true');
-				if (this.checkOverlap(this.cursor, this.ball)) {
+				if (this.onBall && this.checkOverlap(this.ball, this.mazeGroup.children[i])) {
 					//If we have a collision with the ball we call the wallCollision function
 					this.wallCollision(collision);
 				}
@@ -239,7 +285,7 @@ Ball.Game.prototype = {
 				else {
 					//If we don't find any overlaps we add the current position of the ball in the prevPos array
 					//console.log('Overlapping: false');
-					if (this.checkOverlap(this.cursor, this.ball)) {
+					if (this.onBall) {
 						this.ball.position.x = this.cursor.position.x;
 						this.ball.position.y = this.cursor.position.y;
 					}
@@ -271,7 +317,7 @@ Ball.Game.prototype = {
 			//If the user collided with any of the walls we set the position of the ball to the third latest position. I should probably make this better
 			if (collision) {
 				//console.log('Overlapping: true');
-				if (this.checkOverlap(this.cursor, this.ball)) {
+				if (this.onBall) {
 					//If we have a collision with the ball we call the wallCollision function
 					this.wallCollision(collision);
 				}
@@ -297,6 +343,10 @@ Ball.Game.prototype = {
 
 		//--------------* At end *-----------------------
 		this.prevCollision = collision;
+
+		console.log("at the end of update: ", this.onBall);
+
+
 	},
 
 	checkOverlap: function (spriteA, spriteB) {
