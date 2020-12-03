@@ -61,6 +61,7 @@ Ball.Result.prototype = {
         //this.game.state.states['Game'].timer
     },
     startSurvey: function(){
-        window.open("http://www.google.com", "_blank");
+        //window.open("http://www.google.com", "_blank");
+        window.location.href = "http://www.google.com";
     }
 };

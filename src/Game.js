@@ -22,7 +22,8 @@ Ball.Game.prototype = {
 		var maze = []; //save states of all maze grids, 1 for wall/untouched, 0 for path/touched
 		var moves = []; //save the current movements when finding the path
 		var gridNum = { x: 11, y: 19 }; //determin the complexity of the maze (must be odd number)
-		this.gridSize = { x: Ball._WIDTH / gridNum.x, y: 0.9 * Ball._HEIGHT / gridNum.y };
+		var mergePixel = 1.0;
+		this.gridSize = { x: Ball._WIDTH / gridNum.x + mergePixel, y: 0.9 * Ball._HEIGHT / gridNum.y + mergePixel};
 		console.log(this.gridSize);
 		//initialization
 		for (var j = 0; j < gridNum.y; j++) {
@@ -96,7 +97,8 @@ Ball.Game.prototype = {
 			for (i = 0; i < gridNum.x; i++) {
 				if (maze[j][i] == 1) {
 					if (j == gridNum.y - 2 && i == gridNum.x - 2) continue; //avoid wall at the start position
-					var tempMazeGridSprite = this.game.add.sprite(i * this.gridSize.x, j * this.gridSize.y + 0.1 * Ball._HEIGHT
+					var tempMazeGridSprite = this.game.add.sprite(i * (this.gridSize.x-mergePixel)-0.5*mergePixel, 
+						j * (this.gridSize.y-mergePixel)-0.5*mergePixel + 0.1 * Ball._HEIGHT
 						, mazeGridGraphics.generateTexture());
 					this.mazeGroup.add(tempMazeGridSprite);
 				}
@@ -107,11 +109,11 @@ Ball.Game.prototype = {
 		//Create the goal of the game, the hole
 		var holeGraphics = this.game.add.graphics();
 		holeGraphics.beginFill(0x89f483);
-		holeGraphics.drawRect(0, 0, this.gridSize.x, this.gridSize.y);
+		holeGraphics.drawRect(0, 0, this.gridSize.x-mergePixel*2, this.gridSize.y-mergePixel*2);
 		holeGraphics.endFill();
 		holeGraphics.visible = false;
-		this.hole = this.add.sprite(this.gridSize.x, this.gridSize.y + 0.1 * Ball._HEIGHT, holeGraphics.generateTexture());
-		this.exitText = this.game.add.text(this.gridSize.x * 1.5, this.gridSize.y * 1.5 + 0.1 * Ball._HEIGHT, "E", { ...Ball.fontBig });
+		this.hole = this.add.sprite(this.gridSize.x-mergePixel*0.5, this.gridSize.y-mergePixel*0.5 + 0.1 * Ball._HEIGHT, holeGraphics.generateTexture());
+		this.exitText = this.game.add.text((this.gridSize.x-mergePixel) * 1.5, (this.gridSize.y-mergePixel) * 1.5 + 0.1 * Ball._HEIGHT, "E", { ...Ball.fontBig });
 		var exitScale = (this.gridSize.x / 68.0 < this.gridSize.y / 57.0) ? this.gridSize.x / 68.0 : this.gridSize.y / 57.0;
 		this.exitText.scale.setTo(exitScale); //68.0 and 57.0 are factors to keep suitable size of E
 		this.exitText.anchor.setTo(0.5);
@@ -120,7 +122,7 @@ Ball.Game.prototype = {
 
 		var ballScaleFactor = 0.7 * ((this.gridSize.x < this.gridSize.y) ? this.gridSize.x : this.gridSize.y);
 		//Create the ball and add physics
-		this.ball = this.add.sprite((gridNum.x - 1.5) * this.gridSize.x, (gridNum.y - 1.5) * this.gridSize.y + 0.1 * Ball._HEIGHT, 'ball');
+		this.ball = this.add.sprite((gridNum.x - 1.5) * (this.gridSize.x-mergePixel), (gridNum.y - 1.5) * (this.gridSize.y-mergePixel) + 0.1 * Ball._HEIGHT, 'ball');
 		this.ball.anchor.set(0.5);
 		this.ball.scale.setTo(ballScaleFactor / this.ball.height);
 		//this.physics.enable(this.ball, Phaser.Physics.ARCADE);
