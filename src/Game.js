@@ -120,7 +120,7 @@ Ball.Game.prototype = {
 		//this.physics.enable(this.hole, Phaser.Physics.ARCADE);
 		//this.hole.body.setSize(2, 2);
 
-		var ballScaleFactor = 0.7 * ((this.gridSize.x < this.gridSize.y) ? this.gridSize.x : this.gridSize.y);
+		var ballScaleFactor = 0.65 * ((this.gridSize.x < this.gridSize.y) ? this.gridSize.x : this.gridSize.y);
 		//Create the ball and add physics
 		this.ball = this.add.sprite((gridNum.x - 1.5) * (this.gridSize.x-mergePixel), (gridNum.y - 1.5) * (this.gridSize.y-mergePixel) + 0.1 * Ball._HEIGHT, 'ball');
 		this.ball.anchor.set(0.5);
@@ -131,8 +131,8 @@ Ball.Game.prototype = {
 
 		this.cursor = this.add.sprite(0, 0, 'ball');
 		this.cursor.anchor.setTo(0.5);
-		this.cursor.alpha = 0.5;
-		this.cursor.scale.setTo(ballScaleFactor / this.cursor.height * 0.9);
+		this.cursor.alpha = 0;
+		this.cursor.scale.setTo(ballScaleFactor / this.cursor.height);
 
 
 		//var latestGood = this.ball.position;
@@ -264,8 +264,13 @@ Ball.Game.prototype = {
 				if (this.prevCollision && !collision) {
 					//if go out of collision state, the position also needs to be updated
 					var maxdis = (this.gridSize.x < this.gridSize.y) ? this.gridSize.x : this.gridSize.y;
+					//var maxdis2 = Math.pow(this.gridSize.x,2) + Math.pow(this.gridSize.y,2);
 					var cursorBallDis = Math.sqrt(Math.pow(this.cursor.position.x - this.ball.position.x, 2)
 						+ Math.pow(this.cursor.position.y - this.ball.position.y, 2));
+					//var cursorBallDis2 = Math.pow(this.cursor.position.x - this.ball.position.x, 2)
+						+ Math.pow(this.cursor.position.y - this.ball.position.y, 2);	
+					console.log(maxdis);
+					console.log(cursorBallDis);
 					if (cursorBallDis < maxdis) {
 						this.ball.position.x = this.cursor.position.x;
 						this.ball.position.y = this.cursor.position.y;
