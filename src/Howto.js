@@ -15,7 +15,7 @@ Ball.Howto.prototype = {
 		this.border.lineStyle(8, 0x000000, 0.8);
         this.border.drawRect(0, 0, Ball._WIDTH, Ball._HEIGHT);
         //text
-        var text = "You only have 1 time to do the test.\n\nWhile you could have up to 3 chances if something interrupts you or prevents you from finishing the game.\n\nAfter finish the test, please fill the survey from the result page.\n\nThank you very much for your participation!"
+        var text = window.innerWidth+ '\n'+ window.devicePixelRatio+'\n'+"You only have 1 time to do the test.\n\nWhile you could have up to 3 chances if something interrupts you or prevents you from finishing the game.\n\nAfter finish the test, please fill the survey from the result page.\n\nThank you very much for your participation!"
         this.infoText = this.game.add.text(Ball._WIDTH * 0.08,Ball._HEIGHT * 0.08,text,{font: Ball.scaleFactor*26+"px joystix", ...Ball.white});
         //this.infoText.scale.setTo(Ball.scaleFactor);
         this.infoText.wordWrap = true;
