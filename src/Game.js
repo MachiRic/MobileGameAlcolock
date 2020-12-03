@@ -111,8 +111,8 @@ Ball.Game.prototype = {
 		holeGraphics.endFill();
 		holeGraphics.visible = false;
 		this.hole = this.add.sprite(gridSize.x, gridSize.y + 0.1 * Ball._HEIGHT, holeGraphics.generateTexture());
-		this.exitText = this.game.add.text(gridSize.x*1.5, gridSize.y*1.5 + 0.1 * Ball._HEIGHT, "E", {...Ball.fontBig});
-		var exitScale = (gridSize.x/68.0 < gridSize.y/57.0) ? gridSize.x/68.0 : gridSize.y/57.0;
+		this.exitText = this.game.add.text(gridSize.x * 1.5, gridSize.y * 1.5 + 0.1 * Ball._HEIGHT, "E", { ...Ball.fontBig });
+		var exitScale = (gridSize.x / 68.0 < gridSize.y / 57.0) ? gridSize.x / 68.0 : gridSize.y / 57.0;
 		this.exitText.scale.setTo(exitScale); //68.0 and 57.0 are factors to keep suitable size of E
 		this.exitText.anchor.setTo(0.5);
 		//this.physics.enable(this.hole, Phaser.Physics.ARCADE);
@@ -122,7 +122,7 @@ Ball.Game.prototype = {
 		//Create the ball and add physics
 		this.ball = this.add.sprite((gridNum.x - 1.5) * gridSize.x, (gridNum.y - 1.5) * gridSize.y + 0.1 * Ball._HEIGHT, 'ball');
 		this.ball.anchor.set(0.5);
-		this.ball.scale.setTo(ballScaleFactor/this.ball.height);
+		this.ball.scale.setTo(ballScaleFactor / this.ball.height);
 		//this.physics.enable(this.ball, Phaser.Physics.ARCADE);
 		//this.ball.body.setSize(this.ball.width, this.ball.height);
 		//this.ball.body.bounce.set(0.3, 0.3);
@@ -130,7 +130,7 @@ Ball.Game.prototype = {
 		this.cursor = this.add.sprite(0, 0, 'ball');
 		this.cursor.anchor.setTo(0.5);
 		this.cursor.alpha = 0.5;
-		this.cursor.scale.setTo(ballScaleFactor/this.cursor.height*0.9);
+		this.cursor.scale.setTo(ballScaleFactor / this.cursor.height * 0.9);
 
 		//var latestGood = this.ball.position;
 		//Input from keyboard
@@ -226,11 +226,18 @@ Ball.Game.prototype = {
 				}
 			}
 			else {
-				//If we don't find any overlaps we add the current position of the ball in the prevPos array
-				//console.log('Overlapping: false');
-				if (this.checkOverlap(this.cursor, this.ball)) {
+				if (this.prevCollision && !collision) {
+					//if go out of collision state, the position also needs to be updated
 					this.ball.position.x = this.cursor.position.x;
 					this.ball.position.y = this.cursor.position.y;
+				}
+				else {
+					//If we don't find any overlaps we add the current position of the ball in the prevPos array
+					//console.log('Overlapping: false');
+					if (this.checkOverlap(this.cursor, this.ball)) {
+						this.ball.position.x = this.cursor.position.x;
+						this.ball.position.y = this.cursor.position.y;
+					}
 				}
 			}
 
@@ -239,9 +246,9 @@ Ball.Game.prototype = {
 			//--------------* Touch Input *-------------------------------------------------------------------
 
 			//if (this.checkOverlap(this.cursor, this.ball)) {
-				//console.log("cursor overlaps ball")
-				this.cursor.position.x = this.game.input.activePointer.position.x;
-				this.cursor.position.y = this.game.input.activePointer.position.y;
+			//console.log("cursor overlaps ball")
+			this.cursor.position.x = this.game.input.activePointer.position.x;
+			this.cursor.position.y = this.game.input.activePointer.position.y;
 			//}
 
 			//In a for loop, check all walls in the game and see if the user is colliding or overlapping with the walls.
@@ -265,11 +272,18 @@ Ball.Game.prototype = {
 				}
 			}
 			else {
-				//If we don't find any overlaps we add the current position of the ball in the prevPos array
-				//console.log('Overlapping: false');
-				if (this.checkOverlap(this.cursor, this.ball)) {
+				if (this.prevCollision && !collision) {
+					//if go out of collision state, the position also needs to be updated
 					this.ball.position.x = this.cursor.position.x;
 					this.ball.position.y = this.cursor.position.y;
+				}
+				else {
+					//If we don't find any overlaps we add the current position of the ball in the prevPos array
+					//console.log('Overlapping: false');
+					if (this.checkOverlap(this.cursor, this.ball)) {
+						this.ball.position.x = this.cursor.position.x;
+						this.ball.position.y = this.cursor.position.y;
+					}
 				}
 			}
 
@@ -296,7 +310,7 @@ Ball.Game.prototype = {
 			this.totalCollisions++;
 			this.totalCollisionsText.setText("Collisions: " + this.totalCollisions);
 		}
-		if("vibrate" in window.navigator) {
+		if ("vibrate" in window.navigator) {
 			window.navigator.vibrate(100);
 		}
 	},
