@@ -129,7 +129,7 @@ Ball.Game.prototype = {
 
 		this.cursor = this.add.sprite(0, 0, 'ball');
 		this.cursor.anchor.setTo(0.5);
-		this.cursor.alpha = 0.5;
+		this.cursor.alpha = 0;
 		this.cursor.scale.setTo(ballScaleFactor / this.cursor.height * 0.9);
 
 		//var latestGood = this.ball.position;
