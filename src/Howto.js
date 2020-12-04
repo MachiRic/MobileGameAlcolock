@@ -15,11 +15,11 @@ Ball.Howto.prototype = {
 		this.border.lineStyle(8, 0x000000, 0.8);
         this.border.drawRect(0, 0, Ball._WIDTH, Ball._HEIGHT);
         //text
-        var text = "You only have 1 chance to do the test. And the goal is to drag the ball to the exit(E).\n\nWhile you could have up to 3 chances if something interrupts you or prevents you from finishing the game.\n\nAfter finish the test, please fill the survey from the result page.\n\nThank you very much for your participation!"
-        this.infoText = this.game.add.text(Ball._WIDTH * 0.08,Ball._HEIGHT * 0.08,text,{font: Ball.scaleFactor*26+"px joystix", ...Ball.white});
+        var text = "Please activate the sound (and the vibration mode if you are using Android) on your device for the full experience.\n\nThe goal of the game is to drag the ball to the exit (E), with as few collisions to the walls as possible.\n\nPlease note that the ball will stick to the walls when colliding, you will have to pick it up again to continue the game.\n\nAfter completing the game, please answer the provided survey. Remember your final time and amount of collisions, since you will be asked to provide them in the survey.\n\nThank you very much for your participation!";
+        this.infoText = this.game.add.text(Ball._WIDTH * 0.09,Ball._HEIGHT * 0.08,text,{font: Ball.scaleFactor*24+"px joystix", ...Ball.white});
         //this.infoText.scale.setTo(Ball.scaleFactor);
         this.infoText.wordWrap = true;
-        this.infoText.wordWrapWidth = 0.84*Ball._WIDTH;
+        this.infoText.wordWrapWidth = 0.82*Ball._WIDTH;
         //this.infoText.lineSpacing = -20;
 
         //continue
