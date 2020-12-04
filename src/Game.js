@@ -12,6 +12,8 @@ Ball.Game.prototype = {
 		this.movementForce = 10;
 		this.down = false;
 		this.prevCollision = false;
+		this.prevBallCollidePositionX = 0;
+		this.prevBallCollidePositionY = 0;
 
 		this.vibrationSound = this.game.add.audio('audio-vibration');
 		this.vibrationSound.volume = 0.5;
@@ -135,7 +137,7 @@ Ball.Game.prototype = {
 
 		this.cursor = this.add.sprite(0, 0, 'ball');
 		this.cursor.anchor.setTo(0.5);
-		this.cursor.alpha = 0.3;
+		this.cursor.alpha = 0;
 		this.cursor.scale.setTo(ballScaleFactor / this.cursor.height * 0.9);
 
 
@@ -225,8 +227,6 @@ Ball.Game.prototype = {
 
 
 
-
-
 	},
 	updateCounter: function () {
 		//Update the timer every second in the game
@@ -309,9 +309,13 @@ Ball.Game.prototype = {
 	wallCollision: function (collision) {
 		console.log("wall collision");
 		//Here we see what happens when we hit a wall.
-		if (!this.prevCollision) {
+		if (!this.prevCollision && 
+			(this.prevBallCollidePositionX != this.ball.position.x 
+				|| this.prevBallCollidePositionY!= this.ball.position.y)) {
 			this.totalCollisions++;
 			this.totalCollisionsText.setText("Collisions: " + this.totalCollisions);
+			this.prevBallCollidePositionX = this.ball.position.x;
+			this.prevBallCollidePositionY = this.ball.position.y;
 			if (window.navigator && window.navigator.vibrate) {
 				// Vibration supported
 				window.navigator.vibrate(100);
