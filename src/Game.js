@@ -1,7 +1,7 @@
 Ball.Game = function (game) { };
 Ball.Game.prototype = {
 	create: function () {
-		console.log("Version 0.3");
+		//console.log("Version 0.3");
 		//game background
 		this.stage.backgroundColor = "#ffffff"; //background
 		//Create the look of the game and the physics
@@ -30,7 +30,7 @@ Ball.Game.prototype = {
 		var gridNum = { x: 9, y: 17 }; //determin the complexity of the maze (must be odd number)
 		var mergePixel = 1.0;
 		this.gridSize = { x: Ball._WIDTH / gridNum.x + mergePixel, y: 0.9 * Ball._HEIGHT / gridNum.y + mergePixel};
-		console.log(this.gridSize);
+		//console.log(this.gridSize);
 		//initialization
 		for (var j = 0; j < gridNum.y; j++) {
 			maze[j] = [];
@@ -190,7 +190,7 @@ Ball.Game.prototype = {
 
 
 		this.game.input.onUp.add((e) => {
-			console.log('UP');
+			//console.log('UP');
 			this.onBall = false;
 			//console.log(this.onBall)
 		});
@@ -203,7 +203,7 @@ Ball.Game.prototype = {
 
 
 		this.game.input.onDown.add((e) => {
-			console.log('DOWN');
+			//console.log('DOWN');
 
 			//console.log("BALL: ", this.ball._bounds);
 			//console.log("Cursor: ", this.cursor);
@@ -273,8 +273,8 @@ Ball.Game.prototype = {
 						+ Math.pow(this.cursor.position.y - this.ball.position.y, 2));
 					//var cursorBallDis2 = Math.pow(this.cursor.position.x - this.ball.position.x, 2)
 						+ Math.pow(this.cursor.position.y - this.ball.position.y, 2);	
-					console.log(maxdis);
-					console.log(cursorBallDis);
+					//console.log(maxdis);
+					//console.log(cursorBallDis);
 					if (cursorBallDis < maxdis) {
 						this.ball.position.x = this.cursor.position.x;
 						this.ball.position.y = this.cursor.position.y;
@@ -307,7 +307,7 @@ Ball.Game.prototype = {
 	},
 
 	wallCollision: function (collision) {
-		console.log("wall collision");
+		//console.log("wall collision");
 		//Here we see what happens when we hit a wall.
 		if (!this.prevCollision && 
 			(this.prevBallCollidePositionX != this.ball.position.x 

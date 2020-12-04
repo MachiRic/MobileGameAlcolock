@@ -26,10 +26,16 @@
     //var resWidth = window.innerWidth * window.devicePixelRatio;
     //var resHeight = window.innerHeight * window.devicePixelRatio;
     var resWidth = oriResWidth;
-    var resHeight = window.innerHeight/window.innerWidth*resWidth;
-    console.log(window.innerWidth);
-    console.log(window.devicePixelRatio);
-    console.log(resWidth);
+    var resHeight;
+    if (window.innerWidth/window.innerHeight >= 0.6){
+        resHeight = 667*2;
+    }
+    else{
+        resHeight = window.innerHeight/window.innerWidth*resWidth;
+    }
+    //console.log(window.innerWidth);
+    //console.log(window.devicePixelRatio);
+    //console.log(resWidth);
     var game = new Phaser.Game(resWidth, resHeight, Phaser.AUTO, 'game');
     Ball._WIDTH = resWidth;
     Ball._HEIGHT = resHeight;
