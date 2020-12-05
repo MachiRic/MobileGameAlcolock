@@ -104,7 +104,7 @@ Ball.Result.prototype = {
     },
     startSurvey: function () {
         //window.open("http://www.google.com", "_blank");
-        window.location.href = "http://www.google.com";
+        window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSf80n1xFap6B8PLj0u0lDWeUB7IyTVCD9JiVY1FLROjLX6BYw/viewform";
     },
     restart: function(){
         this.game.state.start('Game');
