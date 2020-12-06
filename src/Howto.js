@@ -15,7 +15,7 @@ Ball.Howto.prototype = {
 		this.border.lineStyle(8, 0x000000, 0.8);
         this.border.drawRect(0, 0, Ball._WIDTH, Ball._HEIGHT);
         //text
-		var text = "Please activate the sound (and the vibration mode if you are using Android) on your device for the full experience.\n\nThe goal of the game is to drag the ball to the exit (E), with as few collisions to the walls as possible.\n\nPlease note that the ball will stick to the walls when colliding, you will have to pick it up again to continue the game.\n\nAfter completing the game, please answer the provided survey. Remember your final time and amount of collisions, since you will be asked to provide them in the survey.\n\nThank you very much for your participation!";
+		var text = "Please activate the sound (and the vibration mode if you are using Android) on your mobile device for the full experience.\n\nThe goal of the game is to drag the ball to the exit (E), with as few collisions to the walls as possible.\n\nPlease note that the ball will stick to the walls when colliding, you will have to pick it up again to continue the game.\n\nAfter completing the game, please answer the provided survey. Remember your final time and amount of collisions, since you will be asked to provide them in the survey.\n\nThank you very much for your participation!";
 		var infotextscale = (Ball._HEIGHT/Ball._WIDTH < 667.0/375.0) ? (Ball._HEIGHT/Ball._WIDTH)/(667.0/375.0) : 1;
         this.infoText = this.game.add.text(Ball._WIDTH * 0.09,Ball._HEIGHT * 0.08,text,{font: Ball.scaleFactor*infotextscale*24+"px joystix", ...Ball.white});
         //this.infoText.scale.setTo(Ball.scaleFactor);
