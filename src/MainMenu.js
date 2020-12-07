@@ -1,6 +1,8 @@
 Ball.MainMenu = function (game) { };
 Ball.MainMenu.prototype = {
 	create: function () {
+		Ball.realWidth = this.game.scale.width;
+		Ball.realHeight = this.game.scale.height;
 		//background
 		this.stage.backgroundColor = "#ffffff";
 		this.bgImage = this.add.sprite(0, 0, 'screen-mainmenu');

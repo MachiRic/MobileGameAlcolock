@@ -135,6 +135,12 @@ Ball.Game.prototype = {
 		//this.ball.body.setSize(this.ball.width, this.ball.height);
 		//this.ball.body.bounce.set(0.3, 0.3);
 
+		//for eye-tracking
+		this.xPrevPredicted = (gridNum.x - 1.5) * (this.gridSize.x-mergePixel);
+		this.xPredicted = this.xPrevPredicted;
+		this.yPrevPredicted = (gridNum.y - 1.5) * (this.gridSize.y-mergePixel) + 0.1 * Ball._HEIGHT;
+		this.yPredicted = this.yPrevPredicted;
+
 		this.cursor = this.add.sprite(0, 0, 'ball');
 		this.cursor.anchor.setTo(0.5);
 		this.cursor.alpha = 0;
@@ -239,12 +245,16 @@ Ball.Game.prototype = {
 
 
 		//Check if the level is finished
-		if (this.checkOverlap(this.ball, this.hole)) { this.finishLevel() }
+		//if (this.checkOverlap(this.ball, this.hole)) { this.finishLevel() }
 
 		//Start by setting collision to false
 		collision = false;
 
+		this.ball.position.x = Ball.xprediction * Ball._WIDTH/Ball.realWidth;
+		this.ball.position.y = Ball.yprediction * Ball._HEIGHT/Ball.realHeight;
 
+
+		/*
 		//Check if the user is dragging the ball
 		if (this.onBall) {
 
@@ -293,7 +303,10 @@ Ball.Game.prototype = {
 		}
 		
 		//--------------* At end *-----------------------
-		this.prevCollision = collision;
+		this.prevCollision = collision;*/
+
+		//console.log("---- Ball position ----");
+		//console.log(this.ball.position);
 
 	},
 

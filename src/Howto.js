@@ -2,6 +2,7 @@ Ball.Howto = function (game) {
 };
 Ball.Howto.prototype = {
     create: function() {
+		console.log(this.game.scale.height);
         //background
 		this.stage.backgroundColor = "#ffffff";
 		this.bgImage = this.add.sprite(0, 0, 'screen-mainmenu');
