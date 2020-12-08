@@ -5,13 +5,14 @@ Ball.Game.prototype = {
 		//game background
 		this.stage.backgroundColor = "#ffffff"; //background
 		//Create the look of the game and the physics
-		//this.physics.startSystem(Phaser.Physics.ARCADE);	//Physics
+		this.physics.startSystem(Phaser.Physics.ARCADE);	//Physics
 		this.timer = 0;
 		this.totalTimer = 0;
 		this.totalCollisions = 0;
 		this.movementForce = 10;
 		this.down = false;
 		this.prevCollision = false;
+
 		this.prevBallCollidePositionX = 0;
 		this.prevBallCollidePositionY = 0;
 
@@ -92,7 +93,7 @@ Ball.Game.prototype = {
 		//maze physics
 		this.mazeGroup = this.add.group();
 		this.mazeGroup.enableBody = true;
-		//this.mazeGroup.physicsBodyType = Phaser.Physics.ARCADE;
+		this.mazeGroup.physicsBodyType = Phaser.Physics.ARCADE;
 		//draw the maze using triangles
 		var mazeGridGraphics = this.game.add.graphics();
 		mazeGridGraphics.beginFill(0x000000);
@@ -103,14 +104,18 @@ Ball.Game.prototype = {
 			for (i = 0; i < gridNum.x; i++) {
 				if (maze[j][i] == 1) {
 					if (j == gridNum.y - 2 && i == gridNum.x - 2) continue; //avoid wall at the start position
+					/*
 					var tempMazeGridSprite = this.game.add.sprite(i * (this.gridSize.x-mergePixel)-0.5*mergePixel, 
 						j * (this.gridSize.y-mergePixel)-0.5*mergePixel + 0.1 * Ball._HEIGHT
 						, mazeGridGraphics.generateTexture());
-					this.mazeGroup.add(tempMazeGridSprite);
+					this.mazeGroup.add(tempMazeGridSprite);*/
+					this.mazeGroup.create(i * (this.gridSize.x-mergePixel)-0.5*mergePixel, 
+					j * (this.gridSize.y-mergePixel)-0.5*mergePixel + 0.1 * Ball._HEIGHT, 
+					mazeGridGraphics.generateTexture());
 				}
 			}
 		}
-		//this.mazeGroup.setAll('body.immovable', true);
+		this.mazeGroup.setAll('body.immovable', true);
 
 		//Create the goal of the game, the hole
 		var holeGraphics = this.game.add.graphics();
@@ -122,8 +127,8 @@ Ball.Game.prototype = {
 		this.exitText = this.game.add.text((this.gridSize.x-mergePixel) * 1.5, (this.gridSize.y-mergePixel) * 1.5 + 0.1 * Ball._HEIGHT, "E", { ...Ball.fontBig });
 		var exitScale = (this.gridSize.x / 68.0 < this.gridSize.y / 57.0) ? this.gridSize.x / 68.0 : this.gridSize.y / 57.0;
 		this.exitText.scale.setTo(exitScale); //68.0 and 57.0 are factors to keep suitable size of E
+		this.physics.enable(this.hole, Phaser.Physics.ARCADE);
 		this.exitText.anchor.setTo(0.5);
-		//this.physics.enable(this.hole, Phaser.Physics.ARCADE);
 		//this.hole.body.setSize(2, 2);
 
 		var ballScaleFactor = 0.65 * ((this.gridSize.x < this.gridSize.y) ? this.gridSize.x : this.gridSize.y);
@@ -131,51 +136,32 @@ Ball.Game.prototype = {
 		this.ball = this.add.sprite((gridNum.x - 1.5) * (this.gridSize.x-mergePixel), (gridNum.y - 1.5) * (this.gridSize.y-mergePixel) + 0.1 * Ball._HEIGHT, 'ball');
 		this.ball.anchor.set(0.5);
 		this.ball.scale.setTo(ballScaleFactor / this.ball.height);
-		//this.physics.enable(this.ball, Phaser.Physics.ARCADE);
-		//this.ball.body.setSize(this.ball.width, this.ball.height);
-		//this.ball.body.bounce.set(0.3, 0.3);
-
-		//for eye-tracking
-		this.xPrevPredicted = (gridNum.x - 1.5) * (this.gridSize.x-mergePixel);
-		this.xPredicted = this.xPrevPredicted;
-		this.yPrevPredicted = (gridNum.y - 1.5) * (this.gridSize.y-mergePixel) + 0.1 * Ball._HEIGHT;
-		this.yPredicted = this.yPrevPredicted;
-
-		this.cursor = this.add.sprite(0, 0, 'ball');
-		this.cursor.anchor.setTo(0.5);
-		this.cursor.alpha = 0.5;
-		this.cursor.scale.setTo(ballScaleFactor / this.cursor.height * 0.9);
+		this.physics.enable(this.ball, Phaser.Physics.ARCADE);
+		console.log(this.ball.width);
+		console.log(this.ball.height);
+		//this.ball.body.setSize(18, 18);
+		this.ball.body.bounce.set(0.3, 0.3);
 
 
 		//var latestGood = this.ball.position;
 		//Input from keyboard
 		this.keys = this.game.input.keyboard.createCursorKeys();
 
-		//  Input Enable the sprites
-		this.ball.inputEnabled = true;
-
-		//  Allow dragging - the 'true' parameter will make the sprite snap to the center
-		//this.ball.input.enableDrag(true);
-		//console.log(this.ball.events);
-
-		//Create player and input from device as orientation
-		Ball._player = this.ball;
-		//window.addEventListener("deviceorientation", this.handleOrientation, true);
-
 		//Update game every second (only timer or everything?)
 		this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
 
 		this.borderGroup = this.add.group();
 		this.borderGroup.enableBody = true;
-		//this.borderGroup.physicsBodyType = Phaser.Physics.ARCADE;
+		this.borderGroup.physicsBodyType = Phaser.Physics.ARCADE;
 		this.border = this.game.add.graphics();
 		this.border.lineStyle(8, 0x000000, 0.8);
 		this.border.drawRect(0, 0, Ball._WIDTH, Ball._HEIGHT);
+		this.borderGroup.add(this.border);
 		this.panel = this.game.add.graphics();
 		this.panel.beginFill(0x000000, 0.8);
 		this.panel.drawRect(0, 0, Ball._WIDTH, Ball._HEIGHT * 0.1);
 		this.borderGroup.add(this.panel);
-		//this.borderGroup.setAll('body.immovable', true);
+		this.borderGroup.setAll('body.immovable', true);
 		//this.bounceSound = this.game.add.audio('audio-bounce');
 
 		this.timerText = this.game.add.text(0.05 * Ball._WIDTH, Ball._HEIGHT * 0.05, "Time: " + this.timer, { ...Ball.fontBig, ...Ball.white });
@@ -185,55 +171,45 @@ Ball.Game.prototype = {
 		this.totalCollisionsText.anchor.setTo(0, 0.5);
 		this.totalCollisionsText.scale.setTo(Ball.scaleFactor);
 
-		//this.startButton[1].lineStyle(4, 0xffffff, 1);
-		//this.startButton[1].drawRect(-Ball._WIDTH * 0.225, -Ball._HEIGHT * 0.025, Ball._WIDTH * 0.45, Ball._HEIGHT * 0.05);
-
-
-
-		//this.ball.body.collideWorldBounds = true;
-		//this.ball.body.bounce.set(0.9);
-		this.onBall = false;
-
-
-		this.game.input.onUp.add((e) => {
-			//console.log('UP');
-			this.onBall = false;
-			//console.log(this.onBall)
-		});
-
-
-		this.game.input.onTap.add(function () {
-			//console.log('TAP');
-			//console.log( this.onBall)
-		});
-
-
-		this.game.input.onDown.add((e) => {
-			//console.log('DOWN');
-
-			//console.log("BALL: ", this.ball._bounds);
-			//console.log("Cursor: ", this.cursor);
-			this.cursor.position.x = e.x;
-			this.cursor.position.y = e.y;
-
-			//console.log("Cursor before: ", this.cursor._bounds);
-			this.cursor._bounds.x = e.x;
-			this.cursor._bounds.y = e.y;
-			this.cursor._bounds.width = this.cursor.width;
-			this.cursor._bounds.height = this.cursor.height;
-			var rect1 = this.ball._bounds;
-			var rect2 = this.cursor._bounds;
-			//console.log("Cursor after: ", rect2, ", Ball after: ", rect1);
-
-			this.onBall = Phaser.Rectangle.intersects(rect1, rect2);
-
-			//console.log(this.onBall);
-
-		});
-
-
-
+		//for eye-tracking
+		this.xPredicted = Ball.xprediction * Ball._WIDTH/Ball.realWidth;
+		this.yPredicted = Ball.yprediction * Ball._HEIGHT/Ball.realHeight;
 	},
+
+	update: function () {
+
+		this.xPredicted = Ball.xprediction * Ball._WIDTH/Ball.realWidth;
+		this.yPredicted = Ball.yprediction * Ball._HEIGHT/Ball.realHeight
+		console.log(this.xPredicted + ', ' + this.yPredicted);
+
+		var xOffset = this.xPredicted - Ball._WIDTH/2.0;
+		var yOffset = this.yPredicted - Ball._HEIGHT/2.0;
+
+		if(xOffset < 0) {
+			this.ball.body.velocity.x -= this.movementForce;
+			console.log("left");
+		}
+		else if(xOffset >= 0) {
+			this.ball.body.velocity.x += this.movementForce;
+			console.log("right");
+		}
+		if(yOffset < 0) {
+			this.ball.body.velocity.y -= this.movementForce;
+			console.log("up");
+		}
+		else if(yOffset >= 0) {
+			this.ball.body.velocity.y += this.movementForce;
+			console.log("down");
+		}
+		//this.physics.arcade.collide(this.ball, this.borderGroup, this.wallCollision, null, this);
+		this.physics.arcade.collide(this.ball, this.mazeGroup, this.wallCollision, null, this);
+		this.physics.arcade.overlap(this.ball, this.hole, this.finishLevel, null, this);
+
+
+		//this.cursor.position.x = Ball.xprediction * Ball._WIDTH/Ball.realWidth;
+		//this.cursor.position.y = Ball.yprediction * Ball._HEIGHT/Ball.realHeight;
+	},
+
 	updateCounter: function () {
 		//Update the timer every second in the game
 		this.timer++;
@@ -241,116 +217,20 @@ Ball.Game.prototype = {
 		//this.totalTimeText.setText("Total time: "+(this.totalTimer+this.timer));
 	},
 
-	update: function () {
-
-
-		//Check if the level is finished
-		//if (this.checkOverlap(this.ball, this.hole)) { this.finishLevel() }
-
-		//Start by setting collision to false
-		collision = false;
-
-		this.cursor.position.x = Ball.xprediction * Ball._WIDTH/Ball.realWidth;
-		this.cursor.position.y = Ball.yprediction * Ball._HEIGHT/Ball.realHeight;
-
-		
-		//Check if the user is dragging the ball
-		//if (this.onBall) {
-		if (this.checkOverlap(this.cursor, this.ball)) {
-
-
-			//this.cursor.position.x = this.game.input.activePointer.position.x;
-			//this.cursor.position.y = this.game.input.activePointer.position.y;
-
-			//In a for loop, check all walls in the game and see if the user is colliding or overlapping with the walls.
-			for (i = 0; i < this.mazeGroup.children.length; i++) {
-				if (this.checkOverlap(this.cursor, this.mazeGroup.children[i])) {
-					//If they overlap with at least one wall we set the collision to true.
-					collision = true;
-				}
-			}
-
-			if (collision) {
-				//console.log('Overlapping: true');
-				//If we have a collision with the ball we call the wallCollision function
-				this.wallCollision(collision);
-			}
-			else {
-				this.ball.position.x = this.cursor.position.x;
-				this.ball.position.y = this.cursor.position.y;
-				/*
-				if (this.prevCollision && !collision) {
-					//if go out of collision state, the position also needs to be updated
-					var maxdis = (this.gridSize.x < this.gridSize.y) ? this.gridSize.x : this.gridSize.y;
-					//var maxdis2 = Math.pow(this.gridSize.x,2) + Math.pow(this.gridSize.y,2);
-					var cursorBallDis = Math.sqrt(Math.pow(this.cursor.position.x - this.ball.position.x, 2)
-						+ Math.pow(this.cursor.position.y - this.ball.position.y, 2));
-					//var cursorBallDis2 = Math.pow(this.cursor.position.x - this.ball.position.x, 2)
-						+ Math.pow(this.cursor.position.y - this.ball.position.y, 2);	
-					//console.log(maxdis);
-					//console.log(cursorBallDis);
-					if (cursorBallDis < maxdis) {
-						this.ball.position.x = this.cursor.position.x;
-						this.ball.position.y = this.cursor.position.y;
-					}
-				}
-				else {
-					//If we don't find any overlaps we add the current position of the ball in the prevPos array
-					//console.log('Overlapping: false');
-					if (this.checkOverlap(this.cursor, this.ball)){
-						this.ball.position.x = this.cursor.position.x;
-						this.ball.position.y = this.cursor.position.y;
-					}
-				}*/
-			}
-
-		}
-		
-		//--------------* At end *-----------------------
-		this.prevCollision = collision;
-
-		//console.log("---- Ball position ----");
-		//console.log(this.ball.position);
-
-	},
-
-	checkOverlap: function (spriteA, spriteB) {
-		//Check if two sprites overlap, or "collide"
-		var boundsA = spriteA.getBounds();
-		//console.log(boundsA);
-		var boundsB = spriteB.getBounds();
-		//console.log(boundsB);
-		return Phaser.Rectangle.intersects(boundsA, boundsB);
-	},
-
 	wallCollision: function (collision) {
 		//console.log("wall collision");
 		//Here we see what happens when we hit a wall.
-		if (!this.prevCollision && 
-			(this.prevBallCollidePositionX != this.ball.position.x 
-				|| this.prevBallCollidePositionY!= this.ball.position.y)) {
-			this.totalCollisions++;
-			this.totalCollisionsText.setText("Collisions: " + this.totalCollisions);
-			this.prevBallCollidePositionX = this.ball.position.x;
-			this.prevBallCollidePositionY = this.ball.position.y;
-			if (window.navigator && window.navigator.vibrate) {
-				// Vibration supported
-				window.navigator.vibrate(100);
-			 } else {
-				// Vibration not supported
-				if (!this.vibrationSound.isPlaying){
-					this.vibrationSound.play();
-				}
-			 }
-			/*
-			if (!this.bounceSound.isPlaying){
-				this.bounceSound.play();
-			}*/
-			/*
-			if ("vibrate" in window.navigator) {
-				window.navigator.vibrate(100);
-			}*/
-		}
+		this.totalCollisions++;
+		this.totalCollisionsText.setText("Collisions: " + this.totalCollisions);
+		if (window.navigator && window.navigator.vibrate) {
+			// Vibration supported
+			window.navigator.vibrate(100);
+		 } else {
+			// Vibration not supported
+			if (!this.vibrationSound.isPlaying){
+				this.vibrationSound.play();
+			}
+		 }
 	},
 
 	finishLevel: function () {

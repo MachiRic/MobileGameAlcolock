@@ -26,17 +26,16 @@
 </head>
 
 <body>
-    <div id = "parentDiv">
     <script>
         window.applyKalmanFilter = true;
-
+        
         window.onload = async function () {
 
             webgazer.params.showVideoPreview = true;
-            const webgazerInstance = await webgazer.setRegression('ridge') /* currently must set regression and tracker */
+            const webgazerInstance = await webgazer.setRegression('ridge') //currently must set regression and tracker 
                 .setTracker('TFFacemesh')
                 .begin();
-            webgazerInstance.showPredictionPoints(true); /* shows a square every 100 milliseconds where current prediction is */
+            webgazerInstance.showPredictionPoints(true); //shows a square every 100 milliseconds where current prediction is 
 
             webgazer.setGazeListener(function (data, elapsedTime) {
                 if (data) {
@@ -53,41 +52,40 @@
 
 
         (function () {
-        //responsive
-        var oriResWidth = 375 * 2;
-        //var resWidth = window.innerWidth * window.devicePixelRatio;
-        //var resHeight = window.innerHeight * window.devicePixelRatio;
-        var resWidth = oriResWidth;
-        var resHeight;
-        if (window.innerWidth / window.innerHeight >= 0.7) {
-            resHeight = 667 * 2;
-        }
-        else {
-            resHeight = window.innerHeight / window.innerWidth * resWidth;
-        }
-        //console.log(window.innerWidth);
-        //console.log(window.devicePixelRatio);
-        //console.log(resWidth);
-        var game = new Phaser.Game(resWidth, resHeight, Phaser.AUTO, 'game');
+            //responsive
+            var oriResWidth = 375 * 2;
+            //var resWidth = window.innerWidth * window.devicePixelRatio;
+            //var resHeight = window.innerHeight * window.devicePixelRatio;
+            var resWidth = oriResWidth;
+            var resHeight;
+            if (window.innerWidth / window.innerHeight >= 0.7) {
+                resHeight = 667 * 2;
+            }
+            else {
+                resHeight = window.innerHeight / window.innerWidth * resWidth;
+            }
+            //console.log(window.innerWidth);
+            //console.log(window.devicePixelRatio);
+            //console.log(resWidth);
+            var game = new Phaser.Game(resWidth, resHeight, Phaser.AUTO, 'game');
 
-        //Ball.realWidth = game.scale.width;
-        //Ball.realHeight = game.scale.width;
-        //console.log(game.scale.width);
-        //console.log(game.scale.width);
+            //Ball.realWidth = game.scale.width;
+            //Ball.realHeight = game.scale.width;
+            //console.log(game.scale.width);
+            //console.log(game.scale.width);
 
-        Ball._WIDTH = resWidth;
-        Ball._HEIGHT = resHeight;
-        Ball.scaleFactor = resWidth / 750.0;
-        game.state.add('Boot', Ball.Boot);
-        game.state.add('Preloader', Ball.Preloader);
-        game.state.add('MainMenu', Ball.MainMenu);
-        game.state.add('Howto', Ball.Howto);
-        game.state.add('Game', Ball.Game);
-        game.state.add('Result', Ball.Result);
-        game.state.start('Boot');
+            Ball._WIDTH = resWidth;
+            Ball._HEIGHT = resHeight;
+            Ball.scaleFactor = resWidth / 750.0;
+            game.state.add('Boot', Ball.Boot);
+            game.state.add('Preloader', Ball.Preloader);
+            game.state.add('MainMenu', Ball.MainMenu);
+            game.state.add('Howto', Ball.Howto);
+            game.state.add('Game', Ball.Game);
+            game.state.add('Result', Ball.Result);
+            game.state.start('Boot');
         })();
     </script>
-    </div>
 </body>
 
 </html>
