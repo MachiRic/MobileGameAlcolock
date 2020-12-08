@@ -143,7 +143,7 @@ Ball.Game.prototype = {
 
 		this.cursor = this.add.sprite(0, 0, 'ball');
 		this.cursor.anchor.setTo(0.5);
-		this.cursor.alpha = 0;
+		this.cursor.alpha = 0.5;
 		this.cursor.scale.setTo(ballScaleFactor / this.cursor.height * 0.9);
 
 
@@ -250,16 +250,17 @@ Ball.Game.prototype = {
 		//Start by setting collision to false
 		collision = false;
 
-		this.ball.position.x = Ball.xprediction * Ball._WIDTH/Ball.realWidth;
-		this.ball.position.y = Ball.yprediction * Ball._HEIGHT/Ball.realHeight;
+		this.cursor.position.x = Ball.xprediction * Ball._WIDTH/Ball.realWidth;
+		this.cursor.position.y = Ball.yprediction * Ball._HEIGHT/Ball.realHeight;
 
-
-		/*
+		
 		//Check if the user is dragging the ball
-		if (this.onBall) {
+		//if (this.onBall) {
+		if (this.checkOverlap(this.cursor, this.ball)) {
 
-			this.cursor.position.x = this.game.input.activePointer.position.x;
-			this.cursor.position.y = this.game.input.activePointer.position.y;
+
+			//this.cursor.position.x = this.game.input.activePointer.position.x;
+			//this.cursor.position.y = this.game.input.activePointer.position.y;
 
 			//In a for loop, check all walls in the game and see if the user is colliding or overlapping with the walls.
 			for (i = 0; i < this.mazeGroup.children.length; i++) {
@@ -275,6 +276,9 @@ Ball.Game.prototype = {
 				this.wallCollision(collision);
 			}
 			else {
+				this.ball.position.x = this.cursor.position.x;
+				this.ball.position.y = this.cursor.position.y;
+				/*
 				if (this.prevCollision && !collision) {
 					//if go out of collision state, the position also needs to be updated
 					var maxdis = (this.gridSize.x < this.gridSize.y) ? this.gridSize.x : this.gridSize.y;
@@ -297,13 +301,13 @@ Ball.Game.prototype = {
 						this.ball.position.x = this.cursor.position.x;
 						this.ball.position.y = this.cursor.position.y;
 					}
-				}
+				}*/
 			}
 
 		}
 		
 		//--------------* At end *-----------------------
-		this.prevCollision = collision;*/
+		this.prevCollision = collision;
 
 		//console.log("---- Ball position ----");
 		//console.log(this.ball.position);
